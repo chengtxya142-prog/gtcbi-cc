@@ -1,4 +1,4 @@
-# Operating rules / ִ�й��� �� V2.0.1
+# Operating rules / 执行规则 — V2.0.1
 
 ## Configuration and scope
 
@@ -23,7 +23,7 @@ Map by responsibility, not matching F numbers. A fact has one maintained owner; 
 
 ## Sequence and routing
 
-Read existing records �� establish scope �� F1 �� F2/F3/company routes �� lightweight personnel discovery once major identity conflicts are resolved �� F5 routing �� justified deeper work/F6 �� delivery and action assessment �� transaction checks when triggered �� save/read back within authorized scope.
+Read existing records → establish scope → F1 → F2/F3/company routes → lightweight personnel discovery once major identity conflicts are resolved → F5 routing → justified deeper work/F6 → delivery and action assessment → transaction checks when triggered → save/read back within authorized scope.
 
 Keep legal entity, brand, group and local subsidiary distinct. Group size or purchasing authority does not prove local scope. Identity conflicts block dependent personnel and external-action judgments, not independent evidence collection.
 
@@ -77,6 +77,6 @@ Default: no generic total, employee threshold or mandatory review platform. Expr
 
 When approved rules allow intervals, calculate explicit lower/upper possible values for missing dimensions; these are not probabilistic confidence intervals. Keep provisional grade if boundaries cross. Human strategic priority is separate from evidence score. The bundled validator deliberately requests industry-specific review for any enabled numerical score.
 
-## ����Ҫ��
+## 中文要点
 
-����ͨ�� F1�CF6 ���壬��ְ��������ҵ���������о�ִ����ϲ����ڱ���Ŀ��ȡ�ã���λ����Ա��·����Ȩ�޷ֿ����顣��ȱ�ڱ���δ������ȷӰ����ϵ�����ۡ�������ǩԼ�򷢻�����һ���������������������ֱ�ȡ֤����ҵ����Ĭ�Ϲرգ������ż����ѯԤ�㲻ͨ�û���֤�ݹ��ڻ�ͻ��·���ֻ������ظ��ˣ���ˢ��ȫ�����ڡ��ʼ�ģ��ֻ������׼��Χ�Ĳݸ壬ʵ������������ʵִ�����ݡ�
+保留通用 F1–F6 含义，按职责吸收行业工作流。研究执行完毕不等于必需目标取得；岗位、人员、路径、权限分开核验。多缺口保持未决，明确影响联系、报价、寄样、签约或发货的哪一步。买方条件和卖方能力分别取证。行业评分默认关闭，人数门槛与查询预算不通用化。证据过期或客户新反馈只触发相关复核，不刷新全卡日期。邮件模块只产生获准范围的草稿，实际外联另有真实执行依据。

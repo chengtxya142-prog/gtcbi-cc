@@ -20,6 +20,6 @@ Do not transfer a source workflow's module number, fixed headcount, query quota 
 
 Use the repository's optional offline checker for a structured JSON run. Passing it does not verify the truth or adequacy of the evidence; perform semantic review as described in the output contract.
 
-## �������
+## 中文入口
 
-�����ڿ���ҵ B2B �ͻ���������ϵ��·�����顢�����������жϺͶ�����¡��ȶ������ٰ�����Χִ�У��о���ɡ���������ȡ�á��İ�������ʵ�ʷ��ͷֱ��жϡ���ֹ��δ֪�����桢�Ѽ���������ȡ��Ŀ�ꡢ�Ѹ�λ����������֤���ˡ���ֹ�հ���ҵ�����ż������֡�
+适用于跨行业 B2B 客户背调、联系人路径核验、合作可行性判断和定向更新。先读规则，再按任务范围执行；研究完成、具名交付取得、文案就绪、实际发送分别判断。禁止把未知当负面、把检索结束当取得目标、把岗位线索当已验证个人。禁止照搬行业人数门槛或评分。

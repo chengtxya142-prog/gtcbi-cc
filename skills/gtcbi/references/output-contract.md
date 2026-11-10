@@ -1,4 +1,4 @@
-# Output contract / �����Լ �� V2.0.1
+# Output contract / 输出契约 — V2.0.1
 
 Lead with follow / conditional follow / defer / stop, the main opportunity and risk, conditions for changing the decision, and the current action. State evidence limitations close to affected conclusions. Do not require a numerical score.
 
@@ -6,10 +6,10 @@ Lead with follow / conditional follow / defer / stop, the main opportunity and r
 
 | Sheet | Required content |
 | --- | --- |
-| �ͻ�������Ϣ | Target/company identity, source, actual check dates, seller configuration, model/profile/Run IDs, scope/mode and required deliverables |
-| �ͻ�������� | Decision; F1�CF6; Why now; routing; buyer/seller comparison; contacts and independent verification fields; evidence register; gaps with action impact; separate completion states; current/subsequent actions |
-| �ʼ����� | Optional company-referral or verified named-person draft; factual claim IDs; one CTA; draft/sent/reply evidence separately; configurable follow-up timing |
-| ����ӳ�� | Stable field keys, input-to-conclusion mappings, source/claim links and diagnostics; no diagnostic output feeds facts or business decisions |
+| 客户基本信息 | Target/company identity, source, actual check dates, seller configuration, model/profile/Run IDs, scope/mode and required deliverables |
+| 客户背调结果 | Decision; F1–F6; Why now; routing; buyer/seller comparison; contacts and independent verification fields; evidence register; gaps with action impact; separate completion states; current/subsequent actions |
+| 邮件跟进 | Optional company-referral or verified named-person draft; factual claim IDs; one CTA; draft/sent/reply evidence separately; configurable follow-up timing |
+| 数据映射 | Stable field keys, input-to-conclusion mappings, source/claim links and diagnostics; no diagnostic output feeds facts or business decisions |
 
 Preserve original valid details on edits. No customer records are included with this package. This contract is not an XLSX file or export implementation. Use the host's supported document/spreadsheet tools when a user requests exports, then validate values, statuses and references across formats.
 
@@ -31,6 +31,6 @@ The repository example is the JSON interchange reference. `evidence` and `conclu
 
 Dates use ISO YYYY-MM-DD. Synthetic records must set `synthetic: true` and identify fictional entities. The JSON schema used by the lightweight checker is intentionally conservative; richer host records may require an adapter and semantic review.
 
-## ����
+## 中文
 
-�ı��ṹ�� V2.0 �������һ�£����Ӷ�������״̬��Why now����ȱ�ڶ���Ӱ���ʱЧ����������ֻ��֤��������Ҳ���ܷ������ɡ���ɡ�״̬��δ�����ʼ�ʱ��ȷδ���ã��������ʼ�ֻ��ݸ塣������Ϣ������ʵ�߽磬��ֹ��Ư��ģ���ڸ�δ��ɽ�����
+四表结构与 V2.0 结果方向一致；增加独立交付状态、Why now、多缺口动作影响和时效。勾稽不能只数证据行数，也不能反向生成“完成”状态。未启用邮件时明确未启用；已生成邮件只标草稿。受限信息保留事实边界，禁止用漂亮模板掩盖未完成交付。
