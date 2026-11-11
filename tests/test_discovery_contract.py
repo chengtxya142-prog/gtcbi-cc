@@ -23,6 +23,15 @@ def additional_batch():
     }
 
 
+def manual_candidate():
+    return {
+        "id": "CAND-002", "name": "Manually Supplied Buyer (fictional)",
+        "country": None, "website": None, "match_reason": "Operator supplied; unverified",
+        "sources": [], "entity_key": "SYN-MANUAL-BUYER", "status": "pending",
+        "snapshot_revision": "P1", "origin": "manual",
+    }
+
+
 class DiscoveryTests(unittest.TestCase):
     def test_valid_pending_record_and_no_mutation(self):
         data = discovery_fixture()
@@ -193,6 +202,47 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(validate_discovery(data), [])
         del data["snapshot"]["profile_confirmation"]
         self.assertIn("CONFIG_UNCONFIRMED", codes(data))
+
+    def test_manual_addition_shares_pool_without_changing_batch_membership(self):
+        data = discovery_fixture()
+        data["candidates"].append(manual_candidate())
+        self.assertEqual(validate_discovery(data), [])
+        del data["snapshot"]["profile_confirmation"]
+        self.assertIn("CONFIG_UNCONFIRMED", codes(data))
+
+    def test_candidate_origin_rejects_explicit_invalid_values(self):
+        for origin in (None, "", "external", [], True):
+            with self.subTest(origin=origin):
+                data = discovery_fixture()
+                data["candidates"][0]["origin"] = origin
+                self.assertIn("SCHEMA", codes(data))
+
+    def test_manual_candidate_cannot_count_toward_a_discovery_batch(self):
+        data = discovery_fixture()
+        data["candidates"][0]["origin"] = "manual"
+        self.assertIn("SCHEMA", codes(data))
+
+    def test_discovery_default_still_requires_batch_membership(self):
+        data = discovery_fixture()
+        data["batches"] = []
+        self.assertIn("SCHEMA", codes(data))
+
+    def test_explicit_discovered_origin_requires_a_batch_and_read_sources(self):
+        data = discovery_fixture()
+        data["candidates"][0]["origin"] = "discovered"
+        self.assertEqual(validate_discovery(data), [])
+        missing_batch = copy.deepcopy(data)
+        missing_batch.update(entry_mode="direct_target", batches=[])
+        self.assertIn("SCHEMA", codes(missing_batch))
+        data["candidates"][0]["sources"] = []
+        self.assertIn("SCHEMA", codes(data))
+
+    def test_adding_manual_candidate_does_not_inherit_approval(self):
+        data = approve(discovery_fixture())
+        data["candidates"].append(manual_candidate())
+        self.assertEqual(validate_discovery(data), [])
+        data["runs"] = [run_summary("CAND-002")]
+        self.assertEqual(codes(data), {"GATE_SELECTION"})
 
     def test_normalize_domain(self):
         self.assertEqual(normalize_domain("https://www.EXAMPLE.invalid./shop?a=1"),

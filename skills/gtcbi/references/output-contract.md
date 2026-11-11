@@ -2,6 +2,8 @@
 
 Lead with follow / conditional follow / defer / stop, the main opportunity and risk, conditions for changing the decision, and the current action. State evidence limitations close to affected conclusions. Do not require a numerical score.
 
+The [five-field candidate format](discovery-and-gate.md#discover-and-display) is for the pre-research pool; it is not a formal finding or an extra required worksheet. Candidate selection and approval, research execution and required deliverables, draft readiness, cooperation conditions, actual handoff, and each requested export's status stay separate. A pure export retains the original research scope, dates and statuses.
+
 ## Four-sheet workbook layout
 
 | Sheet | Required content |
@@ -27,9 +29,9 @@ Evidence count, action count, nonempty cells and successful formulas do not prov
 
 ## Structured interchange
 
-The repository example is the JSON interchange reference. `evidence` and `conclusions` use stable IDs; `scope.required_deliverables` lists delivery IDs; `gaps.affected_actions` uses contact/quote/sample/sign/ship or declared internal actions. `current_action.ready` describes readiness, not execution. Profile-approved N/A requires an explanation.
+The repository examples are the JSON interchange reference; see [discovery record](discovery-record.md) for optional discovery and gate fields. `evidence` and `conclusions` use stable IDs; `scope.required_deliverables` lists delivery IDs; `gaps.affected_actions` uses contact/quote/sample/sign/ship or declared internal actions. `current_action.ready` describes readiness, not execution. Profile-approved N/A requires an explanation.
 
-Dates use ISO YYYY-MM-DD. Synthetic records must set `synthetic: true` and identify fictional entities. The JSON schema used by the lightweight checker is intentionally conservative; richer host records may require an adapter and semantic review.
+Research dates use ISO YYYY-MM-DD. Synthetic records must set `synthetic: true` and identify fictional entities. The JSON schema used by the lightweight checker is intentionally conservative; richer host records may require an adapter and semantic review.
 
 ## 中文
 

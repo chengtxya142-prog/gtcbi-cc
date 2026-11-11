@@ -176,7 +176,7 @@ def _validate_batches(batches, revisions):
     return issues, membership
 
 
-def _validate_candidates(candidates, revisions, membership, *, discovered):
+def _validate_candidates(candidates, revisions, membership, *, discovery_mode):
     issues = []
     statuses = {}
     entity_keys = set()
@@ -190,6 +190,15 @@ def _validate_candidates(candidates, revisions, membership, *, discovered):
                 issues.append(_issue("SCHEMA", f"{path}.{field} must be a nonblank string"))
 
         candidate_id = candidate.get("id")
+        from_batch = _text(candidate_id) and candidate_id in membership
+        origin = candidate.get("origin", "discovered" if discovery_mode or from_batch else "manual")
+        if origin not in ("manual", "discovered"):
+            issues.append(_issue("SCHEMA", f"{path}.origin must be manual or discovered"))
+        elif origin == "manual" and from_batch:
+            issues.append(_issue("SCHEMA", f"{path} is manual and must not belong to a discovery batch"))
+        elif origin == "discovered" and not from_batch:
+            issues.append(_issue("SCHEMA", f"{path} is not listed in a discovery batch"))
+
         candidate_revision = candidate.get("snapshot_revision")
         if not _text(candidate_revision) or candidate_revision not in revisions:
             issues.append(_issue("CONFIG_REVISION", f"{path} must reference a retained snapshot revision"))
@@ -198,9 +207,7 @@ def _validate_candidates(candidates, revisions, membership, *, discovered):
                 issues.append(_issue("DUPLICATE_CANDIDATE", f"{path} repeats candidate ID {candidate_id!r}"))
             else:
                 statuses[candidate_id] = candidate.get("status")
-            if discovered and candidate_id not in membership:
-                issues.append(_issue("SCHEMA", f"{path} is not listed in a discovery batch"))
-            if candidate_id in membership and membership[candidate_id] != candidate_revision:
+            if from_batch and membership[candidate_id] != candidate_revision:
                 issues.append(_issue("CONFIG_REVISION", f"{path} must match its batch revision"))
 
         entity_key = candidate.get("entity_key")
@@ -219,8 +226,7 @@ def _validate_candidates(candidates, revisions, membership, *, discovered):
             issues.append(_issue("SCHEMA", f"{path}.status must be pending, selected, or excluded"))
 
         sources = candidate.get("sources")
-        from_batch = _text(candidate_id) and candidate_id in membership
-        if not isinstance(sources, list) or ((discovered or from_batch) and not sources):
+        if not isinstance(sources, list) or (origin == "discovered" and not sources):
             issues.append(_issue("SCHEMA", f"{path}.sources requires a list of read sources for discovery"))
         else:
             for source_index, source in enumerate(sources):
@@ -477,7 +483,7 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
     batch_issues, membership = _validate_batches(batches, revisions)
     issues.extend(batch_issues)
     candidate_issues, statuses = _validate_candidates(
-        candidates, revisions, membership, discovered=mode == "discovery"
+        candidates, revisions, membership, discovery_mode=mode == "discovery"
     )
     issues.extend(candidate_issues)
     approval_issues, approvals = _validate_approvals(record, statuses, revision, revisions)

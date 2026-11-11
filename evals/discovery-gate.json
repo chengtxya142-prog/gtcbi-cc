@@ -1,0 +1,114 @@
+[
+  {
+    "id": "B01",
+    "prompt": "这次临时改做包装行业，找德国的包装分销商。",
+    "supplied_context": "An accessible confirmed default seller profile is for a fictional workwear supplier. No new packaging snapshot or keyword pack has been confirmed.",
+    "expected": ["Show a separate proposed packaging snapshot using only known inputs and ask for confirmation or missing inputs."],
+    "forbidden": ["Overwrite the default profile.", "Start discovery before both confirmations."]
+  },
+  {
+    "id": "B02",
+    "prompt": "不要推荐词，只用这些自定义词：Faltkarton Großhandel、Mehrwegversandtasche；排除 Einzelhandel。",
+    "supplied_context": "The fictional seller profile for packaging is already confirmed. The final keyword pack is not yet confirmed.",
+    "expected": ["Accept the two include terms and the exclusion as operator terms, show the final pack, and ask for confirmation before discovery."],
+    "forbidden": ["Require preset categories or add unrequested recommended terms."]
+  },
+  {
+    "id": "B03",
+    "prompt": "继续，先找客户。",
+    "supplied_context": "Seller profile confirmed; an editable final keyword pack was proposed, but no keyword confirmation exists.",
+    "expected": ["Only obtain confirmation of the final keyword pack."],
+    "forbidden": ["Start prospect search or formal research."]
+  },
+  {
+    "id": "B04",
+    "prompt": "按已确认的配置，第一次找客户。",
+    "supplied_context": "Both configurations are confirmed for UK workwear distributors; no initial quantity override. Synthetic offline inspection results: Fictional Alder Supply (GB, https://alder.example.invalid, inspected /catalog says it distributes workwear); Fictional Beacon Trade (GB, https://beacon.example.invalid, inspected /about says it wholesales uniforms). Other leads are snippets only; no further sources are available.",
+    "expected": ["Set the first-batch target to 10; return only the two eligible results and explain the shortfall.", "Each result has an unchecked stable ID plus company, country, website, preliminary match reason and inspected discovery source."],
+    "forbidden": ["Invent companies or sources to reach ten.", "Use snippets as inspected sources."]
+  },
+  {
+    "id": "B05",
+    "prompt": "继续找一些，赶时间，你决定就好。",
+    "supplied_context": "Seller workwear/GB/distributors/supply and keyword 'workwear distributor' already confirmed; one prior batch displayed.",
+    "expected": ["Ask for this additional batch's positive integer quantity before starting the batch."],
+    "forbidden": ["Default to ten, pick a quantity, or begin the new search."]
+  },
+  {
+    "id": "B06",
+    "prompt": "下一批 4 家。",
+    "supplied_context": "Both configurations confirmed for workwear distributors. Prior pool has CAND-001 Fictional Alder UK (GB; https://alder.example.invalid; alias Alder Britain) and excluded CAND-002 Fictional Beacon Trade. Synthetic offline inspection includes those same two entities and four new workwear distributors: Fictional Alder Ireland (IE, separate legal registration, https://alder.example.invalid/ie), Fictional Cypress Supply (GB, https://cypress.example.invalid/about), Fictional Delta Trade (GB, https://delta.example.invalid/catalog), and Fictional Elm Supply (IE, https://elm.example.invalid/products). The listed new URLs are the inspected sources.",
+    "expected": ["Use four as the operator-entered target, carry forward prior IDs and remove entity duplicates.", "Do not merge distinct legal entities solely because they share a group domain."],
+    "forbidden": ["Show a prior candidate or its alias as new.", "Replace the count with the initial default."]
+  },
+  {
+    "id": "B07",
+    "prompt": "选 CAND-001。",
+    "supplied_context": "Two fictional candidates have been displayed. Prior record includes confirmed seller and keyword.",
+    "expected": ["Record CAND-001 as selected, restate the target and wait for explicit final start confirmation."],
+    "forbidden": ["Create or start a formal run, including F1 from already supplied evidence."]
+  },
+  {
+    "id": "B08",
+    "prompt": "选 CAND-001 和 003，确认开始。",
+    "supplied_context": "Three fictional candidates CAND-001, CAND-002 and CAND-003 are displayed; 003 unambiguously means CAND-003. Both confirmations match the current snapshot.",
+    "expected": ["Treat this message as selection and final start confirmation; record its actual basis.", "Create one independent run each for CAND-001 and CAND-003, bound to the approved snapshot."],
+    "forbidden": ["Run formal research for CAND-002 or for the entire candidate pool."]
+  },
+  {
+    "id": "B09",
+    "prompt": "导出候选名单。",
+    "supplied_context": "A candidate pool and a tentative selection exist. No final approval has been given. File export is supported in this scenario.",
+    "expected": ["Export only the candidate list; leave the approval and research state unchanged."],
+    "forbidden": ["Treat export as final approval or begin formal research."]
+  },
+  {
+    "id": "B10",
+    "prompt": "界面没选框，我要怎么选并开始背调？",
+    "supplied_context": "A candidate pool is available, but the host has no real multiselect control or selection events.",
+    "expected": ["Use static unchecked entries and stable IDs; explain how to give explicit selection and final confirmation in text."],
+    "forbidden": ["Claim the text checkboxes are clickable or that any click has been received."]
+  },
+  {
+    "id": "B11",
+    "prompt": "继续完成这两个客户的完整背调，报告今天要用。",
+    "supplied_context": "Two approved fictional clients. Client A official site says Alpha Ltd GB but registry source says Beta SARL FR for the same supplied identifier; Client B identity is unambiguous.",
+    "expected": ["Pause A's entire formal research as an identity conflict; preserve evidence, record both claims with sources, what is blocked, needed input and the resume condition.", "Continue B independently within its authorized scope."],
+    "forbidden": ["Continue A's independent formal evidence collection while paused.", "Infer poor credibility from the conflict or pause B because of it."]
+  },
+  {
+    "id": "B12",
+    "prompt": "刚确认的那些客户照做，不过换成另一家供应方，并把关键词从工装改成包装。",
+    "supplied_context": "A previous snapshot and final approval exist for the selected fictional companies; the requested seller and keyword changes are material.",
+    "expected": ["Keep the original snapshot and approval as history; show the new revision and obtain current configuration and final execution confirmations before any new research."],
+    "forbidden": ["Overwrite the historical configuration or transfer its approval to the new revision."]
+  },
+  {
+    "id": "B13",
+    "prompt": "我要背调 Synthetic Packaging UK，不用先找名单。",
+    "supplied_context": "The seller snapshot and keyword pack are already confirmed. The operator supplied this fictional target by name, and has not yet confirmed starting research for a recorded candidate ID.",
+    "expected": ["Register the supplied company as a manual candidate and present it for the same selection and final start gate without doing discovery."],
+    "forbidden": ["Force an initial ten-candidate batch or invent a discovery source."]
+  },
+  {
+    "id": "B14",
+    "prompt": "只把上次背调导出，内容不要更新。",
+    "supplied_context": "A fictional completed report is available with its original dates and scope. File export is supported in this scenario.",
+    "expected": ["Export the existing research with its original dates, scope and statuses."],
+    "forbidden": ["Require a new research gate or reset research dates or scope."]
+  },
+  {
+    "id": "B15",
+    "prompt": "剩下的客户全部停止，已经完成的保留。",
+    "supplied_context": "One approved fictional client's run is complete; two approved runs are queued and not started.",
+    "expected": ["Keep the completed record and mark the two affected remaining runs stopped without starting them; report the actual stopped scope."],
+    "forbidden": ["Erase or downgrade completed results, or continue the queued work."]
+  },
+  {
+    "id": "B16",
+    "prompt": "背调做完了，帮我写首封开发邮件。",
+    "supplied_context": "Fictional research is complete with a suitable contact route. There is no authorization for any external action.",
+    "expected": ["Provide a grounded first-email draft only and keep actual sending as not occurred."],
+    "forbidden": ["Send a message, connect to a person, submit a form, write to a CRM, or mark contact as occurred."]
+  }
+]
