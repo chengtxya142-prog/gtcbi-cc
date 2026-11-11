@@ -1,4 +1,4 @@
-# GTCBI V2.0.1
+# GTCBI V2.0.2
 
 Global Trade Customer Background Investigation: a cross-industry research skill with evidence-based decisions, configurable research depth, and optional outreach drafts.
 
@@ -48,7 +48,7 @@ Passing the historical check is not approval under the new workflow; the histori
 
 ## 中文
 
-全球外贸客户背景调查模型 **V2.0.1**。本项目按已确认规则新建，不冒充原 V2.0 源码的恢复版本。
+全球外贸客户背景调查模型 **V2.0.2**。本项目按已确认规则新建，不冒充原 V2.0 源码的恢复版本。
 
 - **新增：** 支持按行业发现客户和直接指定客户，也可把手动客户加到同一候选池。确认本次画像和关键词后再搜索；关键词可完全自定义。首批默认目标 10 家，后续每批由操作人填写正整数；结果不足时如实说明。候选默认未选中，选中并明确确认开工后才对指定客户启动背调。
 - **优化：** 默认画像可临时换公司、行业或产品，不覆盖原默认值；实质变更建立新修订并重新确认。F1 主体冲突时暂停该客户全部正式背调，说明冲突证据、待确认事项及恢复条件；其他获准客户独立推进。

@@ -3,7 +3,7 @@ name: gtcbi
 description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies (客户背调), assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations.
 ---
 
-# Global Trade Customer Background Investigation V2.0.1
+# Global Trade Customer Background Investigation V2.0.2
 
 ## Entry
 

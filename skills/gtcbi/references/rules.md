@@ -1,4 +1,4 @@
-# Operating rules / 执行规则 — V2.0.1
+# Operating rules / 执行规则 — V2.0.2
 
 ## Configuration and scope
 

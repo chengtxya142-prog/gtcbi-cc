@@ -440,7 +440,7 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
         return [_issue("SCHEMA", "discovery record must be an object")]
 
     issues = []
-    for field, expected in (("model_version", "2.0.1"), ("discovery_schema", _GATE_SCHEMA)):
+    for field, expected in (("model_version", "2.0.2"), ("discovery_schema", _GATE_SCHEMA)):
         if record.get(field) != expected:
             issues.append(_issue("SCHEMA", f"{field} must be {expected}"))
     if "synthetic" in record and type(record["synthetic"]) is not bool:
