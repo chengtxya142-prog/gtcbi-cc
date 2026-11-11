@@ -1,0 +1,80 @@
+{
+  "model_version": "2.0.1",
+  "discovery_schema": "discovery-gate-v1",
+  "synthetic": true,
+  "discovery_id": "SYN-DISC-001",
+  "entry_mode": "discovery",
+  "snapshot": {
+    "revision": "P1",
+    "company": "Synthetic Seller (fictional)",
+    "industry": "workwear",
+    "products": [
+      "workwear"
+    ],
+    "markets": [
+      "GB"
+    ],
+    "customer_types": [
+      "distributor"
+    ],
+    "cooperation_objective": "supply",
+    "keywords": {
+      "include": [
+        "workwear distributor"
+      ],
+      "exclude": [],
+      "provenance": [
+        "operator"
+      ]
+    },
+    "profile_confirmation": {
+      "confirmed": true,
+      "revision": "P1",
+      "basis": "Synthetic profile approval",
+      "confirmed_at": null
+    },
+    "keyword_confirmation": {
+      "confirmed": true,
+      "revision": "P1",
+      "basis": "Synthetic keyword approval",
+      "confirmed_at": null
+    }
+  },
+  "batches": [
+    {
+      "id": "B1",
+      "kind": "initial",
+      "requested_count": 10,
+      "quantity_basis": "default",
+      "actual_count": 1,
+      "candidate_ids": [
+        "CAND-001"
+      ],
+      "snapshot_revision": "P1",
+      "shortfall_reason": "Synthetic bounded-source exercise"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "CAND-001",
+      "name": "Example Buyer (fictional)",
+      "country": "GB",
+      "website": "https://buyer.example.invalid",
+      "match_reason": "Synthetic product-channel relevance, not a conclusion",
+      "sources": [
+        {
+          "url": "https://buyer.example.invalid/about",
+          "access_state": "read",
+          "checked_on": "2026-11-10"
+        }
+      ],
+      "entity_key": "SYN-BUYER-GB",
+      "status": "pending",
+      "snapshot_revision": "P1"
+    }
+  ],
+  "selection": [],
+  "approval": null,
+  "approval_history": [],
+  "runs": []
+}
