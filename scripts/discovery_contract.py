@@ -313,6 +313,28 @@ def _validate_approvals(record, statuses, revision, revisions):
     return issues, approvals
 
 
+def validate_identity_pause(execution, conflict, *, path):
+    """Check the declared execution state, explanation, and conflicting claims."""
+    issues = []
+    if execution not in ("blocked", "stopped"):
+        issues.append(_issue("IDENTITY_NOT_PAUSED", f"{path}: execution must be blocked or stopped"))
+
+    conflict = conflict if isinstance(conflict, dict) else {}
+    fields = ("reason", "needed_input", "resume_condition")
+    missing = [field for field in fields if not _text(conflict.get(field))]
+    if missing:
+        issues.append(_issue("IDENTITY_REASON_REQUIRED", f"{path} requires: {', '.join(missing)}"))
+
+    claims = conflict.get("conflicts")
+    if (not isinstance(claims, list)
+            or not all(isinstance(item, dict) and _text(item.get("claim"))
+                       and _text(item.get("source")) for item in claims)
+            or len({" ".join(item["claim"].casefold().split()) for item in claims}) < 2):
+        issues.append(_issue("IDENTITY_EVIDENCE_REQUIRED",
+                             f"{path}.conflicts requires at least two distinct claims with sources"))
+    return issues
+
+
 def _validate_runs(record, statuses, revision, revisions, approvals):
     issues = []
     run_ids = set()
@@ -330,11 +352,14 @@ def _validate_runs(record, statuses, revision, revisions, approvals):
             issues.append(_issue("DUPLICATE_RUN", f"{path} repeats run ID {run_id!r}"))
         else:
             run_ids.add(run_id)
-        if run.get("execution") not in _EXECUTION_STATES:
+        execution = run.get("execution")
+        if execution not in _EXECUTION_STATES:
             issues.append(_issue("SCHEMA", f"{path}.execution must be a recognized execution state"))
         pause = run.get("pause")
         if pause is not None and not isinstance(pause, dict):
             issues.append(_issue("SCHEMA", f"{path}.pause must be an object or null"))
+        elif isinstance(pause, dict) and pause.get("reason_code") == "identity_conflict":
+            issues.extend(validate_identity_pause(execution, pause, path=f"{path}.pause"))
         elif isinstance(pause, dict):
             for field in ("reason_code", "reason", "needed_input", "resume_condition"):
                 if not _text(pause.get(field)):
