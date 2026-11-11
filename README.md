@@ -1,4 +1,4 @@
-# GTCBI · V2.0.2
+# GTCBI · V2.0.3
 
 **Global Trade Customer Background Investigation**  
 **全球外贸客户背景调查模型**
@@ -117,3 +117,9 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
 | [Examples](skills/gtcbi/examples/) · [Tests](tests/) · [Evals](evals/discovery-gate.json) | 合成示例、回归测试与行为场景 |
 | [Changelog](CHANGELOG.md) | 版本更新记录 |
+
+## Acknowledgments / 致谢
+
+Thanks to the [Twenty team and contributors](https://github.com/twentyhq/twenty/graphs/contributors) for building and maintaining [Twenty](https://github.com/twentyhq/twenty), the open-source CRM supported by GTCBI's optional integration.
+
+感谢 [Twenty 项目团队及贡献者](https://github.com/twentyhq/twenty/graphs/contributors) 开发和维护开源 CRM 项目 [Twenty](https://github.com/twentyhq/twenty)，为 GTCBI 的可选 CRM 集成提供支持。

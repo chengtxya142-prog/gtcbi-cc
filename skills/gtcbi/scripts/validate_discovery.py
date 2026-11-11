@@ -27,7 +27,7 @@ def main():
         issues = validate_discovery(data)
 
     print(json.dumps(
-        {"model_version": "2.0.2", "issues": issues},
+        {"model_version": "2.0.3", "issues": issues},
         ensure_ascii=False, indent=2,
     ))
     return 1 if issues else 0

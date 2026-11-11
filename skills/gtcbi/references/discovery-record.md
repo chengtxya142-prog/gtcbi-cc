@@ -1,4 +1,4 @@
-# Optional discovery and research gate records — V2.0.2
+# Optional discovery and research gate records — V2.0.3
 
 The host can record actual dialogue actions in an authorized conversation or file; the operator need not fill in JSON. Follow [discovery and execution gate](discovery-and-gate.md) to obtain confirmations first. An offline record, including a plausible `basis`, cannot grant permission to search, research or contact anyone.
 
@@ -6,7 +6,7 @@ The host can record actual dialogue actions in an authorized conversation or fil
 
 | Field | Content |
 | --- | --- |
-| `discovery_schema`, `model_version` | `"discovery-gate-v1"`, `"2.0.2"`. Set `synthetic: true` for fictional records; keep real records private. |
+| `discovery_schema`, `model_version` | `"discovery-gate-v1"`, `"2.0.3"`. Set `synthetic: true` for fictional records; keep real records private. |
 | `discovery_id`, `entry_mode` | Nonblank task ID distinct from individual run IDs; `discovery` or `direct_target`. Direct-target records require a candidate, not a search batch. |
 | `snapshot` | Current configuration object; see below. |
 | `snapshot_history` | Optional list of complete, confirmed earlier snapshots with unique revisions distinct from the current one. Retain any snapshot referenced by earlier batches, candidates, approvals or runs. |

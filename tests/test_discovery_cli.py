@@ -19,7 +19,7 @@ class DiscoveryCliTests(unittest.TestCase):
         self.assertEqual(result.returncode, expected_exit_code, result.stderr)
         self.assertEqual(result.stderr, "")
         payload = json.loads(result.stdout)
-        self.assertEqual(payload["model_version"], "2.0.2")
+        self.assertEqual(payload["model_version"], "2.0.3")
         return payload["issues"]
 
     def test_synthetic_pending_example(self):

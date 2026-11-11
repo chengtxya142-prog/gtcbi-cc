@@ -1,4 +1,4 @@
-# Prospect discovery and execution gate — V2.0.2
+# Prospect discovery and execution gate — V2.0.3
 
 Discovery yields leads, selection marks intent, and final confirmation authorizes formal research for a specific set of targets and one configuration revision. None authorizes outreach.
 
