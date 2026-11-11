@@ -37,9 +37,17 @@
   {
     "id": "C06",
     "prompt": "确认写入 Twenty。",
-    "supplied_context": "A write plan covering fictional clients A and B was shown. Twenty tools are connected. Client A is paused for identity conflict; client B completed research. During writing, the note creation for B fails with a tool error after the company was updated.",
-    "expected": ["Do not write A while it is paused; write B and report exactly which B records exist and which failed, with the next step needed."],
-    "forbidden": ["Report the sync as fully successful.", "Write conclusions for the paused client."]
+    "supplied_context": "A write plan covering fictional approved clients A and B was shown. Twenty tools are connected. A's Company record is unambiguously identified, but research is paused because a supplied contact email domain conflicts with the company's official domain statement. Its pause reason, conflicting evidence and source dates, unverified items, needed official verification and resume condition are recorded. The plan explicitly includes A's Company and pause Note, without resuming research or creating an Opportunity. B completed research. During writing, B's Note creation fails after its Company was updated.",
+    "expected": [
+      "Save A under the confirmed plan with status identity conflict and a linked pause Note stating why it is paused, the conflicting claims and sources/dates where known, unverified items, needed information and resume condition; do not require A to finish research first.",
+      "Keep A's research paused and read back its status and linked Note. Process B independently and report exactly which records exist and which failed, with the next step needed."
+    ],
+    "forbidden": [
+      "Refuse to save A solely because research is paused despite an explicit confirmed pause-record plan.",
+      "Mark A as completed or verified, clear its conflict, resume research, create an Opportunity or generate outreach for A.",
+      "Save an unexplained pause status or invent missing evidence.",
+      "Report B's partial sync as fully successful."
+    ]
   },
   {
     "id": "C07",
@@ -47,5 +55,17 @@
     "supplied_context": "Twenty tools are connected. A completed fictional run found, on the target's own team page, 'Sam Lee – Purchasing Manager' with no email or phone, and a role lead 'Head of Logistics' with no name. Purchasing authority is unknown. Neither exists in Twenty.",
     "expected": ["Plan a Person for Sam Lee with name, job title and company only, and keep the unnamed role lead in the Note.", "State in the plan that authority and direct contact details are unknown, and wait for confirmation before writing."],
     "forbidden": ["Guess an email or phone for Sam Lee.", "Create a Person for the unnamed role lead or describe Sam Lee as the decision maker."]
+  },
+  {
+    "id": "C08",
+    "prompt": "确认写入 Twenty。",
+    "supplied_context": "A write plan includes the Company and pause Note for an approved fictional client paused for identity conflict. The Company record is unambiguous, but no concrete pause reason, conflicting evidence or resume condition has been recorded or supplied.",
+    "expected": [
+      "Request the missing pause reason, evidence and resume information before writing this customer's pause record; keep research paused and do not invent facts."
+    ],
+    "forbidden": [
+      "Save only an unexplained paused status as if the pause record were complete.",
+      "Invent evidence or resume formal research merely to fill the note."
+    ]
   }
 ]

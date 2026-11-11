@@ -4,7 +4,7 @@ Saving GTCBI results into a [Twenty](https://twenty.com) workspace is an optiona
 
 ## When this applies
 
-Use this file only when the operator asks to save, sync or push results to Twenty (or "the CRM" where Twenty is the connected CRM), or accepts an offer to do so. After a research run finishes you may offer the sync once in one line if Twenty tools are available; do not repeat the offer and do not write on silence.
+Use this file only when the operator asks to save, sync or push results to Twenty (or "the CRM" where Twenty is the connected CRM), or accepts an offer to do so. After a research run finishes or is paused you may offer the sync once in one line if Twenty tools are available; do not repeat the offer and do not write on silence.
 
 ## Check capability first
 
@@ -33,7 +33,17 @@ Research approval does not authorize CRM writes. Before the first write of a syn
 | Email draft | Note | Title starts with `草稿 / Draft — 未发送`. Never record it as a sent email, activity or reply. |
 | Follow or conditional follow decision | Opportunity | Only when the operator's confirmed plan includes it. Use the first pipeline stage; do not set amount, close date or probability unless the operator supplies them. |
 
-Do not write: unapproved or merely selected candidates, excluded candidates, clients paused for identity conflict (until resumed and completed), search snippets, hypotheses presented as facts, the seller's private default profile, or credentials. Stopped or incomplete runs may be saved only if the operator asks, with their real status shown in the Note.
+Do not write: unapproved or merely selected candidates, excluded candidates, search snippets, hypotheses presented as facts, the seller's private default profile, or credentials. Stopped or incomplete runs may be saved only if the operator asks, with their real status shown in the Note. Identity-conflict pauses may be saved under the conditions below; saving does not resume research.
+
+### Customers paused for identity conflict
+
+A customer whose research was approved but is now paused for identity conflict may be saved when the operator explicitly confirms a write plan that includes the paused customer and its pause information. Do not require research to resume or finish before recording the pause.
+
+- First resolve which Company record the pause belongs to using the existing matching rules. If the CRM target itself is ambiguous, ask the operator to identify it; do not guess, merge legal entities or overwrite disputed identity fields. Other customers can still proceed.
+- Plan the Company and a pause Note, plus clarification Tasks if requested. Set `GTCBI status` to `identity conflict` if that field exists; otherwise put the status prominently in the Note. Label it `主体冲突暂停 / Identity conflict — paused`, not completed or verified.
+- The attached Note must state the concrete pause reason, the conflicting claims and their sources/check dates where known, what remains unverified, the information or official verification needed, and the condition for resuming research. Retain the run/candidate IDs and original research dates. If the pause reason or supporting information has not been supplied or recorded, request the missing information before writing that customer's pause record; never invent it or save only an unexplained status.
+- Recording the pause does not clear the conflict, resume formal research, create an Opportunity, or authorize outreach or a draft. Keep disputed contacts and claims clearly unverified in the Note rather than promoting them to verified contact or company fields.
+- Read back the Company status and linked pause Note. Report it as saved with research still paused; report missing or unattached Notes as partial writes, not a fully saved pause record.
 
 ### Optional custom fields on Company
 
@@ -76,4 +86,4 @@ After writing, read the records back, then list per customer what was created, u
 
 ## 中文
 
-把背调结果写入 Twenty CRM 是可选的独立动作，方向为单向：GTCBI → Twenty。必须先确认宿主确实连接了 Twenty 工具，再展示写入计划（哪些客户、写哪些记录），并取得明确确认（如“确认写入 Twenty”）后才写。先查重再新建；不覆盖 CRM 中已有且不同的内容；只写已获批并完成背调的客户；邮件只作为“草稿，未发送”的备注；不标记已发送、已回复或成交状态。写完逐客户报告新建、更新、跳过和失败的记录。未连接时如实说明，改用普通导出，不索要密钥。
+把背调结果写入 Twenty CRM 是可选的独立动作，方向为单向：GTCBI → Twenty。必须先确认宿主确实连接了 Twenty 工具，再展示写入计划（哪些客户、写哪些记录），并取得明确确认（如“确认写入 Twenty”）后才写。先查重再新建；不覆盖 CRM 中已有且不同的内容；可写已获批并完成背调的客户，也可在操作人明确确认包含暂停信息的写入计划后，保存主体冲突暂停的客户。暂停记录必须注明具体缘由、冲突证据与来源（日期已知时记录）、未核实项、待补信息及恢复条件，并标为“主体冲突暂停”，不得标为已完成或已核实；信息缺失先补充，不捏造。若无法确定对应的 CRM 公司记录，先请操作人确认，不误关联。保存不代表恢复背调、创建商机或允许外联，写后须回读暂停备注与关联；邮件只作为“草稿，未发送”的备注；不标记已发送、已回复或成交状态。写完逐客户报告新建、更新、跳过和失败的记录。未连接时如实说明，改用普通导出，不索要密钥。
