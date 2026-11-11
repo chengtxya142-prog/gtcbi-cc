@@ -31,6 +31,12 @@ def codes(issues):
     return {issue["code"] for issue in issues}
 
 
+def gated_example():
+    return json.loads(
+        (ROOT / "examples" / "synthetic-gated-run.json").read_text(encoding="utf-8")
+    )
+
+
 class GateIntegrationTests(unittest.TestCase):
     def setUp(self):
         self.run = json.loads(
@@ -38,17 +44,40 @@ class GateIntegrationTests(unittest.TestCase):
         )
 
     def test_historical_validation_stays_compatible(self):
+        self.assertNotIn("execution", self.run["states"])
         self.assertEqual(validate(self.run, AS_OF), [])
 
     def test_new_execution_requires_gate(self):
-        self.assertIn("GATE_REQUIRED", codes(validate(self.run, AS_OF, require_gate=True)))
+        self.assertEqual(codes(validate(self.run, AS_OF, require_gate=True)),
+                         {"GATE_REQUIRED", "SCHEMA"})
 
     def test_synthetic_gated_example_passes_strict_validation(self):
-        run = json.loads(
-            (ROOT / "examples" / "synthetic-gated-run.json").read_text(encoding="utf-8")
-        )
+        run = gated_example()
         self.assertIs(run["synthetic"], True)
         self.assertEqual(validate(run, AS_OF, require_gate=True), [])
+
+    def test_gated_run_requires_execution_state_even_without_strict_mode(self):
+        run = gated_example()
+        del run["states"]["execution"]
+        for require_gate in (False, True):
+            with self.subTest(require_gate=require_gate):
+                issues = validate(run, AS_OF, require_gate=require_gate)
+                self.assertEqual(codes(issues), {"SCHEMA"})
+                self.assertIn("states.execution", issues[0]["detail"])
+
+    def test_gated_run_rejects_unknown_and_nonstring_execution_states(self):
+        run = gated_example()
+        for execution in ("typo", None, True, 1, [], {}):
+            with self.subTest(execution=execution):
+                run["states"]["execution"] = execution
+                self.assertEqual(codes(validate(run, AS_OF, require_gate=True)), {"SCHEMA"})
+
+    def test_gated_run_accepts_recognized_execution_states(self):
+        run = gated_example()
+        for execution in ("not_started", "running", "completed", "partial", "blocked", "stopped"):
+            with self.subTest(execution=execution):
+                run["states"]["execution"] = execution
+                self.assertEqual(validate(run, AS_OF, require_gate=True), [])
 
     def test_present_gate_is_checked_even_without_strict_mode(self):
         data = approve(discovery_fixture())
@@ -56,6 +85,7 @@ class GateIntegrationTests(unittest.TestCase):
             "schema": "discovery-gate-v1", "discovery_id": data["discovery_id"],
             "candidate_id": "CAND-001", "snapshot": data["snapshot"], "approval": data["approval"],
         }
+        self.run["states"]["execution"] = "partial"
         self.run["target"]["candidate_id"] = "CAND-002"
         self.assertEqual(codes(validate(self.run, AS_OF)), {"GATE_TARGET"})
 
@@ -106,7 +136,9 @@ class GateIntegrationTests(unittest.TestCase):
         for execution in (None, "running", "completed"):
             with self.subTest(execution=execution):
                 self.run["states"]["execution"] = execution
-                self.assertEqual(codes(validate(self.run, AS_OF)), {"IDENTITY_NOT_PAUSED"})
+                issues = validate(self.run, AS_OF)
+                self.assertEqual(codes(issues), {"IDENTITY_NOT_PAUSED"})
+                self.assertIn("states.execution", issues[0]["detail"])
 
     def test_explained_identity_pause_needs_no_unknown_dates(self):
         self.mark_identity_conflict()
@@ -150,7 +182,9 @@ class DiscoveryIdentityPauseTests(unittest.TestCase):
 
     def test_candidate_identity_pause_cannot_stay_active(self):
         self.run["execution"] = "running"
-        self.assertEqual(codes(validate_discovery(self.record)), {"IDENTITY_NOT_PAUSED"})
+        issues = validate_discovery(self.record)
+        self.assertEqual(codes(issues), {"IDENTITY_NOT_PAUSED"})
+        self.assertIn("runs[0].execution", issues[0]["detail"])
 
     def test_blocked_candidate_does_not_change_or_block_another_run(self):
         second = copy.deepcopy(self.record["candidates"][0])

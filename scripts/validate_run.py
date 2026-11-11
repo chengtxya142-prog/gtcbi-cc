@@ -5,9 +5,9 @@ from datetime import date
 from pathlib import Path
 
 if __package__:
-    from .discovery_contract import validate_gate, validate_identity_pause
+    from .discovery_contract import validate_execution_state, validate_gate, validate_identity_pause
 else:
-    from discovery_contract import validate_gate, validate_identity_pause
+    from discovery_contract import validate_execution_state, validate_gate, validate_identity_pause
 
 VERSION = '2.0.1'
 
@@ -47,14 +47,17 @@ def validate(run, as_of=None, require_gate=False):
             maps[collection][item['id']] = item
     if any(i['code'] == 'SCHEMA' for i in issues):
         return issues
+    execution = run['states'].get('execution')
     if require_gate or 'gate' in run:
         issues.extend(validate_gate(run))
+        issues.extend(validate_execution_state(execution, path='states.execution'))
     target = run['target']
     action = run['current_action']
     blocked_identity = target.get('identity_status') in ('conflict', 'hard_stop')
     if target.get('identity_status') == 'conflict':
         issues.extend(validate_identity_pause(
-            run['states'].get('execution'), run.get('identity_conflict'), path='identity_conflict',
+            execution, run.get('identity_conflict'),
+            execution_path='states.execution', conflict_path='identity_conflict',
         ))
     if blocked_identity and action.get('kind') in ('contact', 'quote', 'sample', 'sign', 'ship'):
         add('IDENTITY_BLOCK', 'Resolve identity before dependent external action')

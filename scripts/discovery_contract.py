@@ -313,17 +313,24 @@ def _validate_approvals(record, statuses, revision, revisions):
     return issues, approvals
 
 
-def validate_identity_pause(execution, conflict, *, path):
+def validate_execution_state(execution, *, path):
+    """Check the shared execution-state vocabulary for a declared run."""
+    if execution not in _EXECUTION_STATES:
+        return [_issue("SCHEMA", f"{path} must be a recognized execution state")]
+    return []
+
+
+def validate_identity_pause(execution, conflict, *, execution_path, conflict_path):
     """Check the declared execution state, explanation, and conflicting claims."""
     issues = []
     if execution not in ("blocked", "stopped"):
-        issues.append(_issue("IDENTITY_NOT_PAUSED", f"{path}: execution must be blocked or stopped"))
+        issues.append(_issue("IDENTITY_NOT_PAUSED", f"{execution_path} must be blocked or stopped"))
 
     conflict = conflict if isinstance(conflict, dict) else {}
     fields = ("reason", "needed_input", "resume_condition")
     missing = [field for field in fields if not _text(conflict.get(field))]
     if missing:
-        issues.append(_issue("IDENTITY_REASON_REQUIRED", f"{path} requires: {', '.join(missing)}"))
+        issues.append(_issue("IDENTITY_REASON_REQUIRED", f"{conflict_path} requires: {', '.join(missing)}"))
 
     claims = conflict.get("conflicts")
     if (not isinstance(claims, list)
@@ -331,7 +338,7 @@ def validate_identity_pause(execution, conflict, *, path):
                        and _text(item.get("source")) for item in claims)
             or len({" ".join(item["claim"].casefold().split()) for item in claims}) < 2):
         issues.append(_issue("IDENTITY_EVIDENCE_REQUIRED",
-                             f"{path}.conflicts requires at least two distinct claims with sources"))
+                             f"{conflict_path}.conflicts requires at least two distinct claims with sources"))
     return issues
 
 
@@ -353,13 +360,14 @@ def _validate_runs(record, statuses, revision, revisions, approvals):
         else:
             run_ids.add(run_id)
         execution = run.get("execution")
-        if execution not in _EXECUTION_STATES:
-            issues.append(_issue("SCHEMA", f"{path}.execution must be a recognized execution state"))
+        issues.extend(validate_execution_state(execution, path=f"{path}.execution"))
         pause = run.get("pause")
         if pause is not None and not isinstance(pause, dict):
             issues.append(_issue("SCHEMA", f"{path}.pause must be an object or null"))
         elif isinstance(pause, dict) and pause.get("reason_code") == "identity_conflict":
-            issues.extend(validate_identity_pause(execution, pause, path=f"{path}.pause"))
+            issues.extend(validate_identity_pause(
+                execution, pause, execution_path=f"{path}.execution", conflict_path=f"{path}.pause",
+            ))
         elif isinstance(pause, dict):
             for field in ("reason_code", "reason", "needed_input", "resume_condition"):
                 if not _text(pause.get(field)):
