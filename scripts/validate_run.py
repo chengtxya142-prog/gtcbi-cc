@@ -4,10 +4,16 @@ import json
 from datetime import date
 from pathlib import Path
 
+if __package__:
+    from .discovery_contract import validate_execution_state, validate_gate, validate_identity_pause
+else:
+    from discovery_contract import validate_execution_state, validate_gate, validate_identity_pause
+
 VERSION = '2.0.1'
 
 
-def validate(run, as_of=None):
+def validate(run, as_of=None, require_gate=False):
+    """Check a research record; historical consistency is not execution approval."""
     issues = []
     def add(code, detail):
         issues.append({'code': code, 'detail': detail})
@@ -41,9 +47,18 @@ def validate(run, as_of=None):
             maps[collection][item['id']] = item
     if any(i['code'] == 'SCHEMA' for i in issues):
         return issues
+    execution = run['states'].get('execution')
+    if require_gate or 'gate' in run:
+        issues.extend(validate_gate(run))
+        issues.extend(validate_execution_state(execution, path='states.execution'))
     target = run['target']
     action = run['current_action']
     blocked_identity = target.get('identity_status') in ('conflict', 'hard_stop')
+    if target.get('identity_status') == 'conflict':
+        issues.extend(validate_identity_pause(
+            execution, run.get('identity_conflict'),
+            execution_path='states.execution', conflict_path='identity_conflict',
+        ))
     if blocked_identity and action.get('kind') in ('contact', 'quote', 'sample', 'sign', 'ship'):
         add('IDENTITY_BLOCK', 'Resolve identity before dependent external action')
     verified_people = set()
@@ -151,9 +166,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('run', type=Path)
     parser.add_argument('--as-of', help='YYYY-MM-DD, defaults to today')
+    parser.add_argument('--require-gate', action='store_true',
+                        help='Require an embedded gate for new execution records')
     args = parser.parse_args()
     try:
-        result = validate(json.loads(args.run.read_text(encoding='utf-8-sig')), args.as_of)
+        result = validate(json.loads(args.run.read_text(encoding='utf-8-sig')), args.as_of,
+                          require_gate=args.require_gate)
     except (OSError, ValueError, TypeError) as exc:
         result = [{'code':'INPUT_ERROR', 'detail':str(exc)}]
     print(json.dumps({'model_version':VERSION, 'issues':result}, ensure_ascii=False, indent=2))

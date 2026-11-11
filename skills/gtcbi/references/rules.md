@@ -2,7 +2,7 @@
 
 ## Configuration and scope
 
-Record seller industry, product/service, target markets, customer types, cooperation model, relevant MOQ/price/delivery/compliance/service capabilities, exclusions, language and confirmed keyword pack. Reuse valid configurations; do not repeatedly ask for the same inputs. Unknown seller capability is not a promise.
+Use [discovery and execution gate](discovery-and-gate.md) for new research from discovery or named targets. Use the approved seller snapshot and record relevant MOQ/price/delivery/compliance/service capabilities, exclusions and language. Unknown seller capability is not a promise.
 
 Each run records an ID, model/profile versions, target legal entity and country, research goal, mode, required modules/deliverables, start/check dates, source restrictions, budget and stopping criteria. Scope changes require a reason; never silently narrow a task to claim completion.
 
@@ -23,9 +23,9 @@ Map by responsibility, not matching F numbers. A fact has one maintained owner; 
 
 ## Sequence and routing
 
-Read existing records → establish scope → F1 → F2/F3/company routes → lightweight personnel discovery once major identity conflicts are resolved → F5 routing → justified deeper work/F6 → delivery and action assessment → transaction checks when triggered → save/read back within authorized scope.
+After the applicable execution gate: read existing records → establish scope → F1 → F2/F3/company routes → lightweight personnel discovery → F5 routing → justified deeper work/F6 → delivery and action assessment → transaction checks when triggered → save/read back within authorized scope.
 
-Keep legal entity, brand, group and local subsidiary distinct. Group size or purchasing authority does not prove local scope. Identity conflicts block dependent personnel and external-action judgments, not independent evidence collection.
+Keep legal entity, brand, group and local subsidiary distinct. Group size or purchasing authority does not prove local scope. For a run created by the discovery or named-target gate, an F1 identity conflict pauses **all formal investigation of that client**, including otherwise independent evidence collection; preserve obtained evidence and continue other approved clients independently. Follow the [identity pause and recovery rule](discovery-and-gate.md#pause-stop-and-recover). For a historical run outside the gate, unresolved identity still blocks dependent personnel and external-action judgments.
 
 Routes: park (evidenced mismatch/block); verify one decision-changing gap; verify multiple gaps; standard development; strategic research. Multiple gaps remain unresolved and are ordered by decision impact and cost of verification. A strategic R0 target can justify more research but is not ready for outreach. Strategic importance cannot waive identity or compliance blocks.
 

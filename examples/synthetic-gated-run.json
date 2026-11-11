@@ -1,0 +1,52 @@
+{
+  "model_version": "2.0.1",
+  "run_id": "SYNTHETIC-001",
+  "synthetic": true,
+  "mode": "standard",
+  "target": {"entity_id":"SYN-001", "candidate_id":"CAND-001", "name":"Example Workwear (fictional)", "country":"GB", "identity_status":"verified"},
+  "gate": {
+    "schema": "discovery-gate-v1",
+    "discovery_id": "SYN-DISC-001",
+    "candidate_id": "CAND-001",
+    "snapshot": {
+      "revision": "P1",
+      "company": "Synthetic Seller (fictional)",
+      "industry": "workwear",
+      "products": ["workwear"],
+      "markets": ["GB"],
+      "customer_types": ["distributor"],
+      "cooperation_objective": "supply",
+      "keywords": {
+        "include": ["workwear distributor"],
+        "exclude": [],
+        "provenance": ["operator"]
+      },
+      "profile_confirmation": {
+        "confirmed": true, "revision": "P1",
+        "basis": "Synthetic profile approval", "confirmed_at": null
+      },
+      "keyword_confirmation": {
+        "confirmed": true, "revision": "P1",
+        "basis": "Synthetic keyword approval", "confirmed_at": null
+      }
+    },
+    "approval": {
+      "id": "SYN-APPROVAL-001", "candidate_ids": ["CAND-001"],
+      "snapshot_revision": "P1", "confirmed": true,
+      "basis": "Synthetic operator selection and start confirmation",
+      "confirmed_at": null
+    }
+  },
+  "profile": {"id":"synthetic-workwear", "version":"1", "scoring_enabled":false, "blocked_sources":[]},
+  "scope": {"executed":true, "required_deliverables":["D1", "D2"]},
+  "states": {"research_complete":false, "sent":false, "execution":"partial"},
+  "contacts": [{"id":"C1", "name":"", "role":"Buying team", "current_role_verified":false, "relevant_role":true, "work_route":"Synthetic department referral", "reachability":2, "authority":"unknown", "personal_url_verified":false}],
+  "deliverables": [{"id":"D1", "kind":"company_route", "status":"obtained"}, {"id":"D2", "kind":"named_person", "contact_id":"C1", "status":"missing", "reason":"Only department found; named person not verified"}],
+  "evidence": [{"id":"E1", "entity_id":"SYN-001", "source":"synthetic-material", "title":"Fictional supplier directory", "checked_on":"2026-11-09", "status":"verified", "fact":"The synthetic company distributes workwear."}],
+  "conclusions": [{"id":"Q1", "module":"F2", "status":"verified", "text":"Relevant workwear distribution activity", "evidence_ids":["E1"]}],
+  "gaps": [{"id":"G1", "question":"Buyer MOQ acceptance?", "status":"open", "impact":"transaction", "affected_actions":["quote"], "owner":null, "review_on":null}, {"id":"G2", "question":"Required certification scope?", "status":"open", "impact":"transaction", "affected_actions":["sample", "sign"], "owner":null, "review_on":null}],
+  "route":"standard",
+  "current_action":{"kind":"contact", "ready":true, "text":"Ask department for the person responsible; draft only"},
+  "draft":{"kind":"company_referral", "recipient_id":"C1", "claim_ids":["Q1"], "body":"Draft only: Who handles workwear supplier assessment?"},
+  "actual_sends":[]
+}
