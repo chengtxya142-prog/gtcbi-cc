@@ -51,3 +51,18 @@ def discovery_fixture():
         "selection": [], "approval": None,
         "approval_history": [], "runs": [],
     }
+
+
+def approve(data, ids=None):
+    chosen = ["CAND-001"] if ids is None else list(ids)
+    data["selection"] = chosen
+    data["approval"] = {
+        "id": "SYN-APPROVAL-001", "candidate_ids": list(chosen),
+        "snapshot_revision": "P1", "confirmed": True,
+        "basis": "Synthetic operator selection and start confirmation",
+        "confirmed_at": None,
+    }
+    for candidate in data["candidates"]:
+        if candidate["id"] in chosen:
+            candidate["status"] = "selected"
+    return data

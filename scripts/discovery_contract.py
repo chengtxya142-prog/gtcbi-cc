@@ -5,6 +5,10 @@ import re
 from urllib.parse import urlsplit
 
 
+_GATE_SCHEMA = "discovery-gate-v1"
+_EXECUTION_STATES = ("not_started", "running", "completed", "partial", "blocked", "stopped")
+
+
 def normalize_domain(url: str | None) -> str | None:
     """Return a domain as a duplicate clue, never an entity decision."""
     if not isinstance(url, str) or not url.strip():
@@ -122,7 +126,7 @@ def _validate_snapshot(snapshot, *, require_confirmed):
     return issues
 
 
-def _validate_batches(batches, revision):
+def _validate_batches(batches, revisions):
     issues = []
     batch_ids = set()
     membership = {}
@@ -158,8 +162,8 @@ def _validate_batches(batches, revision):
                 issues.append(_issue("SHORTFALL_REASON", f"{path} requires a shortfall reason"))
 
         batch_revision = batch.get("snapshot_revision")
-        if not _text(batch_revision) or batch_revision != revision:
-            issues.append(_issue("CONFIG_REVISION", f"{path} must reference the snapshot revision"))
+        if not _text(batch_revision) or batch_revision not in revisions:
+            issues.append(_issue("CONFIG_REVISION", f"{path} must reference a retained snapshot revision"))
         if not _texts(ids):
             issues.append(_issue("SCHEMA", f"{path}.candidate_ids must be a list of nonblank IDs"))
             continue
@@ -172,9 +176,9 @@ def _validate_batches(batches, revision):
     return issues, membership
 
 
-def _validate_candidates(candidates, revision, membership, *, discovered):
+def _validate_candidates(candidates, revisions, membership, *, discovered):
     issues = []
-    candidate_ids = set()
+    statuses = {}
     entity_keys = set()
     for index, candidate in enumerate(candidates):
         path = f"candidates[{index}]"
@@ -187,12 +191,13 @@ def _validate_candidates(candidates, revision, membership, *, discovered):
 
         candidate_id = candidate.get("id")
         candidate_revision = candidate.get("snapshot_revision")
-        if not _text(candidate_revision) or candidate_revision != revision:
-            issues.append(_issue("CONFIG_REVISION", f"{path} must reference the snapshot revision"))
+        if not _text(candidate_revision) or candidate_revision not in revisions:
+            issues.append(_issue("CONFIG_REVISION", f"{path} must reference a retained snapshot revision"))
         if _text(candidate_id):
-            if candidate_id in candidate_ids:
+            if candidate_id in statuses:
                 issues.append(_issue("DUPLICATE_CANDIDATE", f"{path} repeats candidate ID {candidate_id!r}"))
-            candidate_ids.add(candidate_id)
+            else:
+                statuses[candidate_id] = candidate.get("status")
             if discovered and candidate_id not in membership:
                 issues.append(_issue("SCHEMA", f"{path} is not listed in a discovery batch"))
             if candidate_id in membership and membership[candidate_id] != candidate_revision:
@@ -226,8 +231,160 @@ def _validate_candidates(candidates, revision, membership, *, discovered):
                     issues.append(_issue("SCHEMA", f"{path}.sources[{source_index}] requires a read web source and a checked_on date"))
 
     for candidate_id in membership:
-        if candidate_id not in candidate_ids:
+        if candidate_id not in statuses:
             issues.append(_issue("SCHEMA", f"Batch references unknown candidate {candidate_id!r}"))
+    return issues, statuses
+
+
+def _validate_snapshot_history(history, revision):
+    issues = []
+    revisions = {revision} if _text(revision) else set()
+    for index, snapshot in enumerate(history):
+        path = f"snapshot_history[{index}]"
+        for issue in _validate_snapshot(snapshot, require_confirmed=True):
+            issues.append(_issue(issue["code"], f"{path}: {issue['detail']}"))
+        old_revision = snapshot.get("revision") if isinstance(snapshot, dict) else None
+        if _text(old_revision):
+            if old_revision in revisions:
+                issues.append(_issue("GATE_REVISION", f"{path}.revision must not repeat a snapshot revision"))
+            revisions.add(old_revision)
+    return issues, revisions
+
+
+def _validate_approval(approval, path, revisions):
+    if not isinstance(approval, dict):
+        return [_issue("GATE_UNCONFIRMED", f"{path} requires final confirmation")], None
+
+    issues = []
+    if approval.get("confirmed") is not True or not _text(approval.get("basis")):
+        issues.append(_issue("GATE_UNCONFIRMED", f"{path} requires final confirmation and its basis"))
+    if not _text(approval.get("id")):
+        issues.append(_issue("SCHEMA", f"{path}.id must be a nonblank string"))
+    timestamp = approval.get("confirmed_at")
+    if timestamp is not None and not _iso_datetime(timestamp):
+        issues.append(_issue("SCHEMA", f"{path}.confirmed_at must be an ISO 8601 datetime or null"))
+    revision = approval.get("snapshot_revision")
+    if not _text(revision) or revision not in revisions:
+        issues.append(_issue("GATE_REVISION", f"{path} must reference the applicable snapshot revision"))
+
+    ids = approval.get("candidate_ids")
+    if not _texts(ids, nonempty=True):
+        issues.append(_issue("GATE_SELECTION", f"{path}.candidate_ids must be a nonempty list of nonblank IDs"))
+        return issues, None
+    return issues, set(ids)
+
+
+def _validate_approvals(record, statuses, revision, revisions):
+    issues = []
+    selected = record["selection"]
+    if not _texts(selected) or any(
+        item not in statuses or statuses[item] == "excluded" for item in selected
+    ):
+        issues.append(_issue("GATE_SELECTION", "selection must list only known, non-excluded candidate IDs"))
+        selected = None
+    else:
+        selected = set(selected)
+
+    entries = [
+        (f"approval_history[{index}]", approval)
+        for index, approval in enumerate(record["approval_history"])
+    ]
+    if record["approval"] is not None:
+        entries.insert(0, ("approval", record["approval"]))
+
+    approvals = {}
+    for path, approval in entries:
+        current = path == "approval"
+        approval_issues, ids = _validate_approval(
+            approval, path, (revision,) if current else revisions
+        )
+        issues.extend(approval_issues)
+        if ids is not None:
+            if current and (not selected or ids != selected):
+                issues.append(_issue("GATE_SELECTION", "approval must match the nonempty current selection"))
+            elif not current and not ids.issubset(statuses):
+                issues.append(_issue("GATE_SELECTION", f"{path} includes an unknown candidate ID"))
+        approval_id = approval.get("id") if isinstance(approval, dict) else None
+        if _text(approval_id):
+            if approval_id in approvals:
+                issues.append(_issue("SCHEMA", f"{path}.id must not repeat an approval ID"))
+            else:
+                approvals[approval_id] = (approval.get("snapshot_revision"), ids)
+    return issues, approvals
+
+
+def _validate_runs(record, statuses, revision, revisions, approvals):
+    issues = []
+    run_ids = set()
+    targets = set()
+    current_id = (record["approval"] or {}).get("id")
+    for index, run in enumerate(record["runs"]):
+        path = f"runs[{index}]"
+        if not isinstance(run, dict):
+            issues.append(_issue("SCHEMA", f"{path} must be an object"))
+            continue
+        run_id = run.get("run_id")
+        if not _text(run_id) or run_id == record["discovery_id"]:
+            issues.append(_issue("SCHEMA", f"{path}.run_id must be nonblank and distinct from discovery_id"))
+        elif run_id in run_ids:
+            issues.append(_issue("DUPLICATE_RUN", f"{path} repeats run ID {run_id!r}"))
+        else:
+            run_ids.add(run_id)
+        if run.get("execution") not in _EXECUTION_STATES:
+            issues.append(_issue("SCHEMA", f"{path}.execution must be a recognized execution state"))
+        if run.get("pause") is not None and not isinstance(run["pause"], dict):
+            issues.append(_issue("SCHEMA", f"{path}.pause must be an object or null"))
+
+        candidate_id = run.get("candidate_id")
+        known_candidate = _text(candidate_id) and candidate_id in statuses
+        if not known_candidate:
+            issues.append(_issue("GATE_TARGET", f"{path} must bind one known candidate ID"))
+        run_revision = run.get("snapshot_revision")
+        if not _text(run_revision) or run_revision not in revisions:
+            issues.append(_issue("GATE_REVISION", f"{path} must reference a retained snapshot revision"))
+        elif known_candidate:
+            target = (candidate_id, run_revision)
+            if target in targets:
+                issues.append(_issue("DUPLICATE_RUN", f"{path} repeats candidate {candidate_id!r} at revision {run_revision!r}"))
+            targets.add(target)
+
+        # Without an explicit ID a run can only use the current approval.
+        approval_id = run.get("approval_id", current_id if run_revision == revision else None)
+        if not _text(approval_id) or approval_id not in approvals:
+            issues.append(_issue("GATE_UNCONFIRMED", f"{path} requires a matching final approval"))
+            continue
+        approved_revision, approved_ids = approvals[approval_id]
+        if run_revision != approved_revision:
+            issues.append(_issue("GATE_REVISION", f"{path} must use its approved snapshot revision"))
+        if known_candidate and (approved_ids is None or candidate_id not in approved_ids):
+            issues.append(_issue("GATE_SELECTION", f"{path} candidate was not selected in its approval"))
+    return issues
+
+
+def validate_gate(run: dict) -> list[dict[str, str]]:
+    """Check a research run's embedded approval and snapshot, not its authenticity."""
+    gate = run.get("gate") if isinstance(run, dict) else None
+    if not isinstance(gate, dict) or gate.get("schema") != _GATE_SCHEMA:
+        return [_issue("GATE_REQUIRED", f"run requires an embedded {_GATE_SCHEMA} gate")]
+
+    issues = []
+    discovery_id = gate.get("discovery_id")
+    if not _text(discovery_id):
+        issues.append(_issue("GATE_REQUIRED", "gate.discovery_id must be a nonblank string"))
+    elif run.get("run_id") == discovery_id:
+        issues.append(_issue("SCHEMA", "run_id must be distinct from gate.discovery_id"))
+    candidate_id = gate.get("candidate_id")
+    target = run.get("target")
+    if not _text(candidate_id) or not isinstance(target, dict) or target.get("candidate_id") != candidate_id:
+        issues.append(_issue("GATE_TARGET", "run.target.candidate_id must match gate.candidate_id"))
+
+    snapshot = gate.get("snapshot")
+    issues.extend(_validate_snapshot(snapshot, require_confirmed=True))
+    revision = snapshot.get("revision") if isinstance(snapshot, dict) else None
+    approval_issues, approved_ids = _validate_approval(gate.get("approval"), "gate.approval", (revision,))
+    issues.extend(approval_issues)
+    if _text(candidate_id) and approved_ids is not None and candidate_id not in approved_ids:
+        issues.append(_issue("GATE_SELECTION", "gate.candidate_id must be included in its approval"))
     return issues
 
 
@@ -237,7 +394,7 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
         return [_issue("SCHEMA", "discovery record must be an object")]
 
     issues = []
-    for field, expected in (("model_version", "2.0.1"), ("discovery_schema", "discovery-gate-v1")):
+    for field, expected in (("model_version", "2.0.1"), ("discovery_schema", _GATE_SCHEMA)):
         if record.get(field) != expected:
             issues.append(_issue("SCHEMA", f"{field} must be {expected}"))
     if "synthetic" in record and type(record["synthetic"]) is not bool:
@@ -253,6 +410,9 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
     for field in ("batches", "candidates", "selection", "approval_history", "runs"):
         if not isinstance(record.get(field), list):
             issues.append(_issue("SCHEMA", f"{field} must be a list"))
+    history = record.get("snapshot_history", [])
+    if not isinstance(history, list):
+        issues.append(_issue("SCHEMA", "snapshot_history must be a list"))
     approval = record.get("approval")
     if "approval" not in record or (approval is not None and not isinstance(approval, dict)):
         issues.append(_issue("SCHEMA", "approval must be an object or null"))
@@ -262,12 +422,25 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
     batches = record["batches"]
     candidates = record["candidates"]
     direct_target = mode == "direct_target"
-    activity = bool(direct_target or batches or candidates or record["selection"] or approval is not None or record["runs"])
+    revision = snapshot.get("revision")
+    # Historical activity does not confirm a replacement draft or require it to be confirmed.
+    activity = bool((direct_target and not candidates) or record["selection"] or approval is not None or any(
+        isinstance(item, dict) and item.get("snapshot_revision") == revision
+        for group in (batches, candidates, record["runs"], record["approval_history"])
+        for item in group
+    ))
     issues = _validate_snapshot(snapshot, require_confirmed=activity)
     if direct_target and not candidates:
         issues.append(_issue("SCHEMA", "direct_target requires at least one candidate"))
-    revision = snapshot.get("revision")
-    batch_issues, membership = _validate_batches(batches, revision)
+    history_issues, revisions = _validate_snapshot_history(history, revision)
+    issues.extend(history_issues)
+    batch_issues, membership = _validate_batches(batches, revisions)
     issues.extend(batch_issues)
-    issues.extend(_validate_candidates(candidates, revision, membership, discovered=mode == "discovery"))
+    candidate_issues, statuses = _validate_candidates(
+        candidates, revisions, membership, discovered=mode == "discovery"
+    )
+    issues.extend(candidate_issues)
+    approval_issues, approvals = _validate_approvals(record, statuses, revision, revisions)
+    issues.extend(approval_issues)
+    issues.extend(_validate_runs(record, statuses, revision, revisions, approvals))
     return issues
