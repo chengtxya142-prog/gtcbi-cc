@@ -50,3 +50,20 @@ class DiscoveryCliTests(unittest.TestCase):
             path.write_text('{"model_version":', encoding="utf-8")
             issues = self.run_validator(path, 1)
         self.assertEqual(issues[0]["code"], "INPUT_ERROR")
+
+    def test_deeply_nested_malformed_json_has_json_error(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "nested.json"
+            path.write_text("[" * 12_000, encoding="utf-8")
+            issues = self.run_validator(path, 1)
+        self.assertEqual(issues[0]["code"], "INPUT_ERROR")
+
+    def test_rejects_non_json_number_tokens_even_in_unvalidated_fields(self):
+        record = SYNTHETIC_RECORD.read_text(encoding="utf-8").rstrip()
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "non-json-number.json"
+            for token in ("NaN", "Infinity", "-Infinity"):
+                with self.subTest(token=token):
+                    path.write_text(record[:-1] + f', "extra": {token}}}', encoding="utf-8")
+                    issues = self.run_validator(path, 1)
+                    self.assertEqual(issues[0]["code"], "INPUT_ERROR")
