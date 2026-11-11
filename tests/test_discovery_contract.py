@@ -217,6 +217,16 @@ def run_summary(candidate_id="CAND-001", run_id="SYN-RUN-001", revision="P1", **
     }
 
 
+def pause_fixture():
+    return {
+        "reason_code": "access_blocked",
+        "reason": "The synthetic source is unavailable",
+        "conflicts": [],
+        "needed_input": "An accessible primary source",
+        "resume_condition": "An accessible primary source is supplied",
+    }
+
+
 def embedded_run():
     data = approve(discovery_fixture())
     return {
@@ -314,6 +324,28 @@ class ApprovalTests(unittest.TestCase):
                 data["runs"] = [run_summary()]
                 data["runs"][0][field] = value
                 self.assertIn(code, codes(data))
+
+    def test_empty_pause_cannot_describe_a_blocked_run(self):
+        data = approve(discovery_fixture())
+        data["runs"] = [run_summary(execution="blocked", pause={})]
+        self.assertIn("SCHEMA", codes(data))
+
+    def test_pause_rejects_malformed_required_fields(self):
+        for field, value in (
+            ("reason_code", True), ("reason", ""), ("conflicts", {}),
+            ("needed_input", None), ("resume_condition", " "),
+        ):
+            with self.subTest(field=field):
+                pause = pause_fixture()
+                pause[field] = value
+                data = approve(discovery_fixture())
+                data["runs"] = [run_summary(execution="blocked", pause=pause)]
+                self.assertIn("SCHEMA", codes(data))
+
+    def test_nonidentity_pause_can_have_no_conflicting_claims(self):
+        data = approve(discovery_fixture())
+        data["runs"] = [run_summary(execution="blocked", pause=pause_fixture())]
+        self.assertEqual(validate_discovery(data), [])
 
     def test_malformed_approval_and_selection_ids_are_diagnosed(self):
         for value in ({}, [{"id": "CAND-001"}], [" "], [None]):

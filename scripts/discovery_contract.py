@@ -332,8 +332,15 @@ def _validate_runs(record, statuses, revision, revisions, approvals):
             run_ids.add(run_id)
         if run.get("execution") not in _EXECUTION_STATES:
             issues.append(_issue("SCHEMA", f"{path}.execution must be a recognized execution state"))
-        if run.get("pause") is not None and not isinstance(run["pause"], dict):
+        pause = run.get("pause")
+        if pause is not None and not isinstance(pause, dict):
             issues.append(_issue("SCHEMA", f"{path}.pause must be an object or null"))
+        elif isinstance(pause, dict):
+            for field in ("reason_code", "reason", "needed_input", "resume_condition"):
+                if not _text(pause.get(field)):
+                    issues.append(_issue("SCHEMA", f"{path}.pause.{field} must be a nonblank string"))
+            if not isinstance(pause.get("conflicts"), list):
+                issues.append(_issue("SCHEMA", f"{path}.pause.conflicts must be a list"))
 
         candidate_id = run.get("candidate_id")
         known_candidate = _text(candidate_id) and candidate_id in statuses
