@@ -76,7 +76,11 @@ class DiscoveryTests(unittest.TestCase):
     def test_confirmation_time_requires_an_iso_datetime_or_null(self):
         data = discovery_fixture()
         confirmation = data["snapshot"]["keyword_confirmation"]
-        for timestamp in ("not a time", "2026-11-10", "2026-02-30T13:30:00Z"):
+        for timestamp in (
+            "not a time", "2026-11-10", "2026-02-30T13:30:00Z",
+            "2026-11-10T13:30:00+12:60", "2026-11-10T13:30:00+00:99",
+            "2026-11-10T13:30:00+24:00",
+        ):
             with self.subTest(timestamp=timestamp):
                 confirmation["confirmed_at"] = timestamp
                 self.assertIn("SCHEMA", codes(data))
