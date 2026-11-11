@@ -1,56 +1,78 @@
-# GTCBI V2.0.2
+# GTCBI · V2.0.2
 
-Global Trade Customer Background Investigation: a cross-industry research skill with evidence-based decisions, configurable research depth, and optional outreach drafts.
+**Global Trade Customer Background Investigation**  
+**全球外贸客户背景调查模型**
 
-This is a new standalone implementation of the agreed V2.0.1 rules. It is not a recovered copy of the previous V2.0 repository. No customer records, private Notion pages, credentials, or prior Git history are included.
+An AI-assisted, cross-industry workflow for B2B prospect discovery and customer research. GTCBI helps sales and business development teams move from a market or product idea to a shortlist of prospects, then investigate only the customers explicitly approved by the operator.
 
-## Use
+The project is delivered as a reusable **Skill**, supported by operating rules, output specifications, synthetic examples and optional offline validators. It is not a standalone application or an autonomous lead-generation service.
 
-Open [the skill entrypoint](skills/gtcbi/SKILL.md) with your agent, or copy the entire `skills/gtcbi` directory into the skill directory supported by your agent. For Claude/Gemini or another assistant, supply this entrypoint and the referenced files as project context. No platform-specific installer is claimed.
+## What GTCBI helps you do
 
-1. **Discover prospects by industry:** Confirm the seller company, industry, products, target markets, customer types and cooperation objective. Use known defaults or temporarily switch to another company, industry or product for this run; only a separate explicit request changes the defaults. Review and confirm the final include/exclude keyword pack before searching. Recommendations are optional: you can edit or replace all terms and use only your own keywords.
-2. **Research a named target:** Add the supplied company as a manual candidate. It uses the same profile, keyword and start confirmations, without requiring a discovery batch. You can also add manual targets to the same pool as discovered candidates; manual additions do not count as search results or inherit approval.
+- **Define the opportunity:** confirm the seller company, industry, products, target markets and cooperation goals for each run.
+- **Discover relevant prospects:** use editable recommendations, custom keywords or a combination of both.
+- **Keep the operator in control:** select candidates and explicitly approve research before the full F1–F6 workflow starts.
+- **Build evidence-backed customer insights:** distinguish verified facts, assumptions, unknowns and conflicts; identify business contact paths and decision-changing gaps.
+- **Turn research into next steps:** present cooperation opportunities, risks, outstanding questions and recommended actions. Outreach remains draft-only.
 
-The first discovery batch targets **10 companies** unless you supply a different positive integer. For each later batch, enter a positive integer for that batch. If fewer eligible prospects can be supported by inspected sources, the result reports the actual count and reason rather than filling the list with unsupported leads.
+## Get started
 
-Candidates start unchecked. **Select one or more, then explicitly confirm starting research for exactly that set.** Where real multiselect is unavailable, use the displayed IDs, e.g. `选择 CAND-001、CAND-003，确认开始背调`. Selecting alone, adding a candidate, requesting more results or exporting a list does not start F1. Material configuration changes require new confirmations and fresh approval; existing runs keep their original approved snapshots.
+1. Open [`skills/gtcbi/SKILL.md`](skills/gtcbi/SKILL.md) with your AI assistant, together with its referenced files. You can also place the entire `skills/gtcbi` directory in a Skill location supported by your assistant.
+2. Describe your company, products, target market and goal—or provide a company you already want to research.
+3. Confirm the run-specific configuration and keyword pack. Review the candidate list, then explicitly select and approve the customers to investigate.
 
-Each approved client gets an independent run through the existing F1–F6 workflow. If F1 finds a material identity conflict, pause all formal work for that client, report the reason and conflicting evidence, and state what is needed to resume. Other approved runs can continue. The existing evidence, contact and deliverable checks, targeted refresh and four-sheet [output contract](skills/gtcbi/references/output-contract.md) remain in place. A candidate list is not a formal worksheet; exporting an existing report does not restart research. Optional outreach is draft-only.
+The host assistant must provide the authorized search, source-reading, interaction and file-generation capabilities required for the task. No platform-specific installer is included.
 
-See the [discovery and approval rules](skills/gtcbi/references/discovery-and-gate.md) for details. Searching, reading sources, collecting actual confirmation and exporting files depend on the host's authorized capabilities. This repository does not provide a live crawler, interactive UI, or export engine.
+---
 
-## Validate structured records
+## 中文介绍
 
-Requires Python 3.10+; no third-party dependencies.
+GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背景调查工作流**。
 
-```sh
-python scripts/validate_discovery.py examples/synthetic-discovery.json
-python scripts/validate_run.py examples/synthetic-gated-run.json --require-gate --as-of 2026-11-10
-python -m unittest discover -s tests -v
-```
+它将“明确开发方向、寻找目标客户、人工确认、深入背调、形成行动建议”整理为可复用的 Skill，帮助操作人有依据地判断：**客户是否匹配、合作机会在哪里、还缺哪些信息，以及下一步该做什么。**
 
-The `--as-of` dates are fixed for the synthetic examples. The historical example still supports the original structure check:
+### 核心功能
 
-```sh
-python scripts/validate_run.py examples/synthetic-run.json --as-of 2026-11-09
-```
+| 功能 | 说明 |
+| --- | --- |
+| 灵活配置开发方向 | 可沿用已有默认画像，也可临时切换公司、行业、产品或市场；本次修改不覆盖默认值。 |
+| 开放式关键词 | 支持推荐词、自定义词及混合使用；关键词包确认后才开始搜索。 |
+| 分批发现客户 | 首批默认目标为 10 家，后续每批由操作人填写数量；候选不足时如实说明，不凑数。 |
+| 清晰展示候选 | 默认展示公司名、国家、官网、初步匹配理由及发现来源；支持去重和手动添加。 |
+| 人工确认执行门 | 候选默认未选中，只有“选择客户＋明确确认开始”才启动正式背调；导出或继续查找不代表批准。 |
+| 完整客户背调 | 沿用 F1–F6 流程，结合证据、联系人核验、合作条件和信息缺口，形成业务判断与行动建议。 |
+| 客户任务相互独立 | 主体存在冲突时，仅暂停该客户，并注明缘由、冲突证据、待补信息和恢复条件。 |
+| 可追溯的研究记录 | 保留运行快照、批准记录和历史证据，支持对受影响的信息进行定向更新。 |
 
-Passing the historical check is not approval under the new workflow; the historical example fails `--require-gate`. The validators check declared structure and some contradictions, not actual operator authorization, source truth, legal compliance, authority, semantic entailment, or real sending. Industry scoring needs a separately approved implementation. Synthetic examples are not live research.
+### 两种使用方式
 
-## Package contents
+**按行业寻找客户**
 
-- `skills/gtcbi`: skill, operating rules and four-sheet output contract.
-- `examples/synthetic-discovery.json` and `examples/synthetic-gated-run.json`: fictional pending discovery and approved-run records.
-- `examples/synthetic-run.json`: fictional conditional case with an unfulfilled named-person deliverable.
-- `scripts/validate_discovery.py` and `scripts/validate_run.py`: offline consistency checkers; neither starts research, sends messages nor writes to a CRM.
-- `tests`: executable regression scenarios.
-- `CHANGELOG.md`: version scope and limitations.
+> 帮我寻找法国市场的包装材料分销商。先与我确认产品范围和关键词，再展示首批候选客户。
 
-## 中文
+**直接调查指定公司**
 
-全球外贸客户背景调查模型 **V2.0.2**。本项目按已确认规则新建，不冒充原 V2.0 源码的恢复版本。
+> 我已经有目标公司，请先确认本次配置，再由我确认开始背调，不需要重新搜索一批客户。
 
-- **新增：** 支持按行业发现客户和直接指定客户，也可把手动客户加到同一候选池。确认本次画像和关键词后再搜索；关键词可完全自定义。首批默认目标 10 家，后续每批由操作人填写正整数；结果不足时如实说明。候选默认未选中，选中并明确确认开工后才对指定客户启动背调。
-- **优化：** 默认画像可临时换公司、行业或产品，不覆盖原默认值；实质变更建立新修订并重新确认。F1 主体冲突时暂停该客户全部正式背调，说明冲突证据、待确认事项及恢复条件；其他获准客户独立推进。
-- **保留：** 原完整 F1–F6、模块职责映射、四表输出契约、证据时效与定向更新、联系人四维核验、多缺口分流、研究与交付分开验收、内容验收。模型不写死员工人数、行业权重、来源平台或查询次数；评分默认关闭，邮件模块可选且只生成草稿。
-- **限制：** 搜索、读取来源、真实交互控件和文件交付依赖宿主能力；没有控件时用编号和明确文字确认。离线校验不能认证同意、证实来源或代替研究验收。未捆绑原 V2.0 Excel 模板或 PDF/CSV/Markdown/Excel 导出程序，未验证原导出兼容性。真实客户资料和私有画像不提交到此仓库。
+指定客户可以直接进入候选与确认流程，无需为了流程形式先找满 10 家。宿主不支持真实多选控件时，可通过稳定的客户编号和明确文字完成选择及批准。
+
+### 输出与使用边界
+
+研究结果重点呈现客户匹配情况、合作机会与风险、证据来源、关键缺口和下一步建议，并保留四表输出规范。实际文件生成取决于宿主工具；本仓库不内置导出引擎。
+
+- **有依据再下结论：** 未知不等于负面，检索结束不等于目标信息已经取得。
+- **研究与外联分开：** 邮件模块仅生成可选草稿，不自动发送、提交表单或写入 CRM。
+- **校验不代替判断：** 离线检查器用于检查记录结构和部分一致性，不能证明真实授权、来源真实性或研究结论正确。
+- **私有数据独立保存：** 仓库中的示例均为合成数据；真实客户资料、默认画像和凭证不应提交到公共仓库。
+
+## Documentation / 项目文档
+
+| 入口 | 内容 |
+| --- | --- |
+| [Skill](skills/gtcbi/SKILL.md) | 使用入口与任务路由 |
+| [Discovery & approval](skills/gtcbi/references/discovery-and-gate.md) | 客户发现、选择和启动确认规则 |
+| [Operating rules](skills/gtcbi/references/rules.md) | 完整背调执行规则 |
+| [Output contract](skills/gtcbi/references/output-contract.md) | 交付内容与四表输出规范 |
+| [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
+| [Examples](examples/) · [Tests](tests/) | 合成示例与回归测试 |
+| [Changelog](CHANGELOG.md) | 版本更新记录 |
