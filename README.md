@@ -15,13 +15,39 @@ The project is delivered as a reusable **Skill**, supported by operating rules, 
 - **Build evidence-backed customer insights:** distinguish verified facts, assumptions, unknowns and conflicts; identify business contact paths and decision-changing gaps.
 - **Turn research into next steps:** present cooperation opportunities, risks, outstanding questions and recommended actions. Outreach remains draft-only.
 
+## Install
+
+`skills/gtcbi` is a self-contained [Agent Skills](https://agentskills.io/specification) folder: `SKILL.md`, `references/`, the optional validators in `scripts/` and the synthetic `examples/`. Copy that whole folder (not just `SKILL.md`) to your agent's skill directory:
+
+| Agent | Personal install | Per-project install |
+| --- | --- | --- |
+| Codex (CLI / app) | `~/.codex/skills/gtcbi` | `<repo>/.agents/skills/gtcbi` |
+| Claude Code | `~/.claude/skills/gtcbi` | `<repo>/.claude/skills/gtcbi` |
+| Claude.ai / Claude app | Zip the `gtcbi` folder and upload it under Settings → Capabilities → Skills | — |
+| Hermes Agent | `~/.hermes/skills/gtcbi` | — |
+| Gemini CLI | `~/.gemini/skills/gtcbi` | `<repo>/.gemini/skills/gtcbi` |
+
+```sh
+# macOS / Linux (example: Codex). Swap the target for another agent.
+git clone https://github.com/chengtxya142-prog/gtcbi-cc.git
+cp -R gtcbi-cc/skills/gtcbi ~/.codex/skills/
+```
+
+```powershell
+# Windows PowerShell (example: Claude Code)
+git clone https://github.com/chengtxya142-prog/gtcbi-cc.git
+Copy-Item -Recurse gtcbi-cc\skills\gtcbi "$HOME\.claude\skills\"
+```
+
+Restart the agent or open a new session. Skill folder locations can change between agent releases; check your agent's skill documentation if GTCBI is not picked up.
+
 ## Get started
 
-1. Open [`skills/gtcbi/SKILL.md`](skills/gtcbi/SKILL.md) with your AI assistant, together with its referenced files. You can also place the entire `skills/gtcbi` directory in a Skill location supported by your assistant.
+1. Ask in English or Chinese (e.g. "帮我找德国的包装分销商" or "背调这家公司"), or call the skill by name (`$gtcbi` in Codex, `/gtcbi` in Claude Code). Assistants without skill support can be given [`skills/gtcbi/SKILL.md`](skills/gtcbi/SKILL.md) and its referenced files as context.
 2. Describe your company, products, target market and goal—or provide a company you already want to research.
 3. Confirm the run-specific configuration and keyword pack. Review the candidate list, then explicitly select and approve the customers to investigate.
 
-The host assistant must provide the authorized search, source-reading, interaction and file-generation capabilities required for the task. No platform-specific installer is included.
+The host assistant must provide the authorized search, source-reading, interaction and file-generation capabilities required for the task. Hosts without code execution can follow the workflow but cannot run the optional validators (Python 3.10+, run from the skill folder: `python scripts/validate_discovery.py examples/synthetic-discovery.json`).
 
 ---
 
@@ -43,6 +69,10 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | 完整客户背调 | 沿用 F1–F6 流程，结合证据、联系人核验、合作条件和信息缺口，形成业务判断与行动建议。 |
 | 客户任务相互独立 | 主体存在冲突时，仅暂停该客户，并注明缘由、冲突证据、待补信息和恢复条件。 |
 | 可追溯的研究记录 | 保留运行快照、批准记录和历史证据，支持对受影响的信息进行定向更新。 |
+
+### 安装
+
+把整个 `skills/gtcbi` 文件夹复制到所用 Agent 的技能目录：Codex `~/.codex/skills/`，Claude Code `~/.claude/skills/`，Hermes `~/.hermes/skills/`，Gemini CLI `~/.gemini/skills/`；Claude.ai 把该文件夹打包为 zip 后在“设置 → 功能 → 技能”上传。重启或新开会话后，用中文提问即可触发。
 
 ### 两种使用方式
 
@@ -74,5 +104,5 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | [Operating rules](skills/gtcbi/references/rules.md) | 完整背调执行规则 |
 | [Output contract](skills/gtcbi/references/output-contract.md) | 交付内容与四表输出规范 |
 | [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
-| [Examples](examples/) · [Tests](tests/) | 合成示例与回归测试 |
+| [Examples](skills/gtcbi/examples/) · [Tests](tests/) · [Evals](evals/discovery-gate.json) | 合成示例、回归测试与行为场景 |
 | [Changelog](CHANGELOG.md) | 版本更新记录 |

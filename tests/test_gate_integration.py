@@ -7,7 +7,7 @@ from pathlib import Path
 
 from discovery_fixtures import approve, discovery_fixture
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1] / "skills" / "gtcbi"
 sys.path.insert(0, str(ROOT / "scripts"))
 from discovery_contract import validate_discovery
 from validate_run import validate

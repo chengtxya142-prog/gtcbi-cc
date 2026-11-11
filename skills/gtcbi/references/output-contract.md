@@ -29,7 +29,7 @@ Evidence count, action count, nonempty cells and successful formulas do not prov
 
 ## Structured interchange
 
-The repository examples are the JSON interchange reference; see [discovery record](discovery-record.md) for optional discovery and gate fields. `evidence` and `conclusions` use stable IDs; `scope.required_deliverables` lists delivery IDs; `gaps.affected_actions` uses contact/quote/sample/sign/ship or declared internal actions. `current_action.ready` describes readiness, not execution. Profile-approved N/A requires an explanation.
+The bundled `examples/` files are the JSON interchange reference; see [discovery record](discovery-record.md) for optional discovery and gate fields. `evidence` and `conclusions` use stable IDs; `scope.required_deliverables` lists delivery IDs; `gaps.affected_actions` uses contact/quote/sample/sign/ship or declared internal actions. `current_action.ready` describes readiness, not execution. Profile-approved N/A requires an explanation.
 
 Research dates use ISO YYYY-MM-DD. Synthetic records must set `synthetic: true` and identify fictional entities. The JSON schema used by the lightweight checker is intentionally conservative; richer host records may require an adapter and semantic review.
 

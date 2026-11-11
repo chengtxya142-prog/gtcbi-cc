@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1] / "skills" / "gtcbi"
 SYNTHETIC_RECORD = ROOT / "examples/synthetic-discovery.json"
 
 

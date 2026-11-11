@@ -1,6 +1,11 @@
 ---
 name: gtcbi
-description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies (客户背调), assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations.
+description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies, assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations. 适用于外贸找客户、开发客户、继续找一批候选、客户背调/背景调查、核实公司主体、联系人与采购路径核验、合作可行性判断、导出背调报告。
+compatibility: Works with any Agent Skills host (Codex, Claude Code, Claude.ai, Hermes, Gemini CLI). Web search/source reading depend on host tools; optional validators need Python 3.10+.
+metadata:
+  version: "2.0.2"
+  author: chengtxya142-prog
+  homepage: https://github.com/chengtxya142-prog/gtcbi-cc
 ---
 
 # Global Trade Customer Background Investigation V2.0.2

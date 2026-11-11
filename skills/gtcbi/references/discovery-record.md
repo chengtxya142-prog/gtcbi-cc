@@ -34,7 +34,7 @@ In a discovery summary, a non-null `pause` contains `reason_code`, `reason`, `co
 
 ## Offline checks and diagnostics
 
-Run from the repository root:
+Run from this skill's folder (the directory containing `SKILL.md`), so the commands work wherever the skill is installed:
 
 ```bash
 python scripts/validate_discovery.py examples/synthetic-discovery.json
