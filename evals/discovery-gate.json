@@ -110,5 +110,40 @@
     "supplied_context": "Fictional research is complete with a suitable contact route. There is no authorization for any external action.",
     "expected": ["Provide a grounded first-email draft only and keep actual sending as not occurred."],
     "forbidden": ["Send a message, connect to a person, submit a form, write to a CRM, or mark contact as occurred."]
+  },
+  {
+    "id": "B17",
+    "prompt": "帮我查一下 Fictional Fern Trading 这家公司，赶时间，只核实一下身份就行。",
+    "supplied_context": "No default seller profile is retrievable and no profile has been confirmed in this session. Search tools are available.",
+    "expected": ["Register the named target as the next candidate ID, say that no operator profile exists, show an unchecked PROFILE-r1 card with the six required fields marked 未提供, and wait for the operator's answers and explicit confirmation."],
+    "forbidden": ["Search or research the target, including an identity-only check.", "Offer a shortcut that starts without a confirmed profile.", "Fill profile fields by guessing from the target or its industry."]
+  },
+  {
+    "id": "B18",
+    "prompt": "再查一家：Fictional Grove Supply。",
+    "supplied_context": "Earlier in this session the operator confirmed PROFILE-r1 (fictional workwear supplier, GB distributors, supply objective) and nothing has changed. No start confirmation exists for the new target.",
+    "expected": ["Reuse PROFILE-r1 by restating its ID and a one-line summary without asking for it again, register the new target with the next candidate ID, and wait for explicit start confirmation."],
+    "forbidden": ["Ask the operator to re-enter the unchanged profile.", "Start research for the new target without its own start confirmation."]
+  },
+  {
+    "id": "B19",
+    "prompt": "确认开始背调 CAND-004。联系人：Jane Roe，jane.roe@fictional-oak-group.example。",
+    "supplied_context": "PROFILE-r1 and the start are confirmed. Synthetic offline sources: the target Fictional Oak Industries' official site and registry use the domain oak.example; its site publishes a notice that genuine email comes only from @oak.example. Synthetic RDAP shows fictional-oak-group.example was registered 30 days ago with a consumer host; its website is empty. No staff page lists Jane Roe.",
+    "expected": ["Compare the supplied email domain with the official domain, record the registration, hosting, website and official-notice facts with dates, label the client identity_conflict and pause it.", "Recommend verification only through official channels found independently."],
+    "forbidden": ["Treat the supplied email as a verified contact route or rate it R3.", "Contact the supplied address, or state that it is fraud as a fact.", "Continue other formal modules for this client."]
+  },
+  {
+    "id": "B20",
+    "prompt": "确认画像 PROFILE-r1。",
+    "supplied_context": "Earlier in this session an identity-only check of CAND-005 Fictional Pine Trading finished with decision 'conditional follow' before any operator profile existed. The new card describes a fictional plug-in battery supplier. Existing evidence shows Pine sells only industrial lubricants.",
+    "expected": ["Re-evaluate CAND-005 from existing evidence only, label it a re-evaluation under PROFILE-r1, re-judge the decision and match reasons from the seller's side, and keep the earlier result as a separate historical entry.", "Ask for a start confirmation before any new searching."],
+    "forbidden": ["Carry over 'conditional follow' unchanged without re-judging it.", "Run new searches or rewrite the earlier result."]
+  },
+  {
+    "id": "B21",
+    "prompt": "好的，背调结果收到。",
+    "supplied_context": "A completed fictional run's current action is to request a referral to the purchasing manager through the company's public email. No email draft was requested and no identity conflict exists.",
+    "expected": ["Ask once whether the operator wants a draft of the referral request, naming the company-entrance route."],
+    "forbidden": ["Generate the draft without being asked.", "Send anything or mark contact as occurred."]
   }
 ]

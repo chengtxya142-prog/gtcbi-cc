@@ -6,7 +6,7 @@ Use [discovery and execution gate](discovery-and-gate.md) for new research from 
 
 Each run records an ID, model/profile versions, target legal entity and country, research goal, mode, required modules/deliverables, start/check dates, source restrictions, budget and stopping criteria. Scope changes require a reason; never silently narrow a task to claim completion.
 
-Modes: quick admission; standard development; targeted verification; full investigation; transaction check. Each is evaluated against its declared deliverables, not the amount of text produced.
+Modes: quick admission; standard development; targeted verification; full investigation; transaction check. Each is evaluated against its declared deliverables, not the amount of text produced. No mode waives the confirmed operator profile card; a narrower mode reduces the modules researched, not the seller context.
 
 ## Module ownership
 
@@ -49,6 +49,8 @@ Identity/current employment, functional relevance, contact route and decision au
 
 Record person name, employer/entity/country, current role, relevance, authority status, work route, verified profile URL if obtained, evidence, date, restrictions and ranking. A company page is not a personal profile. Do not invent URLs or private contact details. Profile verified, connection available, invite sent and reply received are separate states.
 
+**Operator-supplied contacts.** When the operator supplies a contact (name, email, phone or signature), treat it as a claim to verify, not as evidence. As part of F1, compare the email domain with the target's official domain from its website or registry. If they differ, check, where accessible: the domain's registration date and registrar (public RDAP/WHOIS), its mail hosting (MX records), whether it serves a real website, and whether the company publishes an anti-fraud notice or an official list of email domains. A recent registration, consumer hosting, an empty site or an official statement excluding the domain is an `identity_conflict` that pauses the client; a group or regional domain the company itself documents is not. Record both domains, the facts found and their dates. Never contact the supplied address to test it, and never call it fraud: report the mismatch and the evidence. Recommend verification only through official channels the operator finds independently, not through details in the suspect message.
+
 Lightweight discovery seeks relevant personnel plus company entrance; standard adds backups/referrals; full covers applicable decision, influence, execution and review functions. Configure roles/path coverage/budget by industry and organization. Count prior useful work toward deeper research. Stop when deliverables are adequately supported, or budget/access limits require a candid unresolved result; never manufacture searches to meet a quota.
 
 ## Feasibility and completion
@@ -59,7 +61,7 @@ Report separately: scope execution; required person/profile/other deliverables; 
 
 A negative finding can complete a research question. Park/stopped runs may finish their explicitly bounded stop assessment; do not label the originally promised outreach/full deliverables obtained.
 
-Drafts, plans and lists do not prove sending. Sales-stage changes require actual communication or transaction evidence. Keep one current priority action and label additional tasks as subsequent/conditional with dependencies.
+When the current action involves contacting the target (a referral request, a role confirmation or a first message) and no email draft was requested, end the delivery by asking once whether the operator wants a draft, naming the route it would use (company entrance or verified person). Do not generate one unasked, and do not repeat the question in later turns if the operator passes over it. With an unresolved identity conflict, offer no draft. Drafts, plans and lists do not prove sending. Sales-stage changes require actual communication or transaction evidence. Keep one current priority action and label additional tasks as subsequent/conditional with dependencies.
 
 ## Evidence and refresh
 
@@ -69,7 +71,7 @@ Industry/country profiles configure freshness by data type. No universal expiry 
 
 Record new feedback first, then refresh only affected facts, routing, feasibility, draft or next action. MOQ feedback ordinarily affects F3/F6; departure affects F4 and dependent drafts; entity conflict affects all dependent judgments. Preserve old/new values, source, scope and dates. Partial refresh does not reset the full-investigation date.
 
-Source applicability, access status and evidence quality are different fields. Apply confirmed source exclusions. Use public or authorized access; official login flow for gated sources, never request passwords, verification codes or session credentials. Read access does not authorize sending, posting, form submission or CRM writes. Reuse evidence, but allow necessary pagination and fresh checks.
+Source applicability, access status and evidence quality are different fields. Apply confirmed source exclusions. Use public or authorized access; official login flow for gated sources, never request passwords, verification codes or session credentials. Read access does not authorize sending, posting, form submission or CRM writes. CRM writes happen only through the separately confirmed [Twenty CRM sync](crm-twenty.md). Reuse evidence, but allow necessary pagination and fresh checks.
 
 ## Optional scoring
 

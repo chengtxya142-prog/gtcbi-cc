@@ -49,6 +49,16 @@ Restart the agent or open a new session. Skill folder locations can change betwe
 
 The host assistant must provide the authorized search, source-reading, interaction and file-generation capabilities required for the task. Hosts without code execution can follow the workflow but cannot run the optional validators (Python 3.10+, run from the skill folder: `python scripts/validate_discovery.py examples/synthetic-discovery.json`).
 
+## Optional: save results to Twenty CRM
+
+GTCBI can save finished research into a [Twenty](https://twenty.com) workspace (cloud or self-hosted). It is one-way (GTCBI → Twenty), optional, and never happens without your confirmation.
+
+1. In Twenty, open **Settings → AI → MCP Server** and add the connection snippet to your agent (OAuth is recommended; do not paste API keys into chat).
+2. Optionally add the GTCBI fields listed in the [sync rules](skills/gtcbi/references/crm-twenty.md) to Companies (decision, research date, run ID, candidate ID, status, key gap).
+3. After a research run, say "把背调结果存到 Twenty". The agent shows a write plan; reply "确认写入 Twenty" to proceed.
+
+Companies are matched before being created, existing CRM values are not overwritten, email drafts are saved as not-sent notes, and the agent reports what was created, updated, skipped or failed after reading the records back. On 2026-11-11 an agent wrote companies, notes, tasks, a contact and a draft note to a live Twenty Cloud workspace through its MCP server.
+
 ---
 
 ## 中文介绍
@@ -103,6 +113,7 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | [Discovery & approval](skills/gtcbi/references/discovery-and-gate.md) | 客户发现、选择和启动确认规则 |
 | [Operating rules](skills/gtcbi/references/rules.md) | 完整背调执行规则 |
 | [Output contract](skills/gtcbi/references/output-contract.md) | 交付内容与四表输出规范 |
+| [Twenty CRM sync](skills/gtcbi/references/crm-twenty.md) | 可选：把背调结果单向写入 Twenty CRM 的规则 |
 | [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
 | [Examples](skills/gtcbi/examples/) · [Tests](tests/) · [Evals](evals/discovery-gate.json) | 合成示例、回归测试与行为场景 |
 | [Changelog](CHANGELOG.md) | 版本更新记录 |
