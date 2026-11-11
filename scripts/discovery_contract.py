@@ -1,6 +1,7 @@
 """Validate offline discovery records without changing them or authorizing research."""
 
-from datetime import date
+from datetime import date, datetime
+import re
 from urllib.parse import urlsplit
 
 
@@ -9,7 +10,9 @@ def normalize_domain(url: str | None) -> str | None:
     if not isinstance(url, str) or not url.strip():
         return None
     try:
-        host = urlsplit(url).hostname
+        parts = urlsplit(url)
+        _ = parts.port  # urlsplit validates explicit ports only when accessed.
+        host = parts.hostname
     except ValueError:
         return None
     if not host:
@@ -52,6 +55,20 @@ def _iso_date(value):
         return date.fromisoformat(value).isoformat() == value
     except ValueError:
         return False
+
+
+def _iso_datetime(value):
+    if not isinstance(value, str) or not re.fullmatch(
+        r"[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}"
+        r"(?::[0-9]{2}(?:\.[0-9]+)?)?(?:Z|[+-][0-9]{2}:[0-9]{2})?",
+        value,
+    ):
+        return False
+    try:
+        datetime.fromisoformat(value[:-1] + "+00:00" if value.endswith("Z") else value)
+    except ValueError:
+        return False
+    return True
 
 
 def _validate_snapshot(snapshot, *, require_confirmed):
@@ -99,8 +116,8 @@ def _validate_snapshot(snapshot, *, require_confirmed):
         if not _text(confirmation.get("revision")) or confirmation["revision"] != revision:
             issues.append(_issue("CONFIG_REVISION", f"snapshot.{field} must confirm the snapshot revision"))
         timestamp = confirmation.get("confirmed_at")
-        if timestamp is not None and not _text(timestamp):
-            issues.append(_issue("SCHEMA", f"snapshot.{field}.confirmed_at must be a string or null"))
+        if timestamp is not None and not _iso_datetime(timestamp):
+            issues.append(_issue("SCHEMA", f"snapshot.{field}.confirmed_at must be an ISO 8601 datetime or null"))
 
     return issues
 
@@ -244,8 +261,11 @@ def validate_discovery(record: dict) -> list[dict[str, str]]:
 
     batches = record["batches"]
     candidates = record["candidates"]
-    activity = bool(batches or candidates or record["selection"] or approval is not None or record["runs"])
+    direct_target = mode == "direct_target"
+    activity = bool(direct_target or batches or candidates or record["selection"] or approval is not None or record["runs"])
     issues = _validate_snapshot(snapshot, require_confirmed=activity)
+    if direct_target and not candidates:
+        issues.append(_issue("SCHEMA", "direct_target requires at least one candidate"))
     revision = snapshot.get("revision")
     batch_issues, membership = _validate_batches(batches, revision)
     issues.extend(batch_issues)

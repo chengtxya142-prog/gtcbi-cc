@@ -65,6 +65,26 @@ class DiscoveryTests(unittest.TestCase):
         del data["snapshot"]["keyword_confirmation"]
         self.assertEqual(validate_discovery(data), [])
 
+    def test_empty_direct_target_requires_candidate_and_confirmations(self):
+        data = discovery_fixture()
+        data.update(entry_mode="direct_target", batches=[], candidates=[])
+        self.assertIn("SCHEMA", codes(data))
+        del data["snapshot"]["profile_confirmation"]
+        del data["snapshot"]["keyword_confirmation"]
+        self.assertIn("CONFIG_UNCONFIRMED", codes(data))
+
+    def test_confirmation_time_requires_an_iso_datetime_or_null(self):
+        data = discovery_fixture()
+        confirmation = data["snapshot"]["keyword_confirmation"]
+        for timestamp in ("not a time", "2026-11-10", "2026-02-30T13:30:00Z"):
+            with self.subTest(timestamp=timestamp):
+                confirmation["confirmed_at"] = timestamp
+                self.assertIn("SCHEMA", codes(data))
+        for timestamp in (None, "2026-11-10T13:30:00Z", "2026-11-10T13:30:00+08:00"):
+            with self.subTest(timestamp=timestamp):
+                confirmation["confirmed_at"] = timestamp
+                self.assertEqual(validate_discovery(data), [])
+
     def test_config_and_keyword_payload_are_checked(self):
         data = discovery_fixture()
         data["snapshot"]["markets"] = [""]
@@ -176,6 +196,13 @@ class DiscoveryTests(unittest.TestCase):
         for value in (None, "example.invalid", "https://[", {}, [1], 3, b"https://a"):
             with self.subTest(value=value):
                 self.assertIsNone(normalize_domain(value))
+
+    def test_normalize_domain_rejects_invalid_ports(self):
+        for port in ("no-such-port", "65536"):
+            with self.subTest(port=port):
+                self.assertIsNone(normalize_domain(f"https://buyer.example.invalid:{port}/about"))
+        self.assertEqual(normalize_domain("https://buyer.example.invalid:443/about"),
+                         "buyer.example.invalid")
 
 
 if __name__ == "__main__":
