@@ -38,7 +38,7 @@ def discovery_fixture():
             "shortfall_reason": "Synthetic bounded-source exercise",
         }],
         "candidates": [{
-            "id": "CAND-001", "name": "Example Buyer (fictional)",
+            "id": "CAND-001", "name": "Example Workwear (fictional)",
             "country": "GB", "website": "https://buyer.example.invalid",
             "match_reason": "Synthetic product-channel relevance, not a conclusion",
             "sources": [{

@@ -57,7 +57,7 @@
   "candidates": [
     {
       "id": "CAND-001",
-      "name": "Example Buyer (fictional)",
+      "name": "Example Workwear (fictional)",
       "country": "GB",
       "website": "https://buyer.example.invalid",
       "match_reason": "Synthetic product-channel relevance, not a conclusion",

@@ -306,6 +306,20 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(validate_discovery(data), [])
         self.assertEqual(data, before)
 
+    def test_fresh_approval_authorizes_manual_run_in_mixed_pool(self):
+        data = approve(discovery_fixture())
+        data["approval_history"] = [data["approval"]]
+        data["runs"] = [run_summary(approval_id="SYN-APPROVAL-001", execution="completed")]
+        data["candidates"][0]["status"] = "pending"
+        data["candidates"].append(manual_candidate())
+        approve(data, ["CAND-002"])
+        data["approval"]["id"] = "SYN-APPROVAL-002"
+        data["runs"].append(run_summary("CAND-002", "SYN-RUN-002"))
+
+        before = copy.deepcopy(data)
+        self.assertEqual(validate_discovery(data), [])
+        self.assertEqual(data, before)
+
     def test_approval_without_selection_is_invalid(self):
         self.assertIn("GATE_SELECTION", codes(approve(discovery_fixture(), ids=[])))
 
