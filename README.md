@@ -1,4 +1,4 @@
-# GTCBI · V2.0.3
+# GTCBI · V2.0.4
 
 **Global Trade Customer Background Investigation**  
 **全球外贸客户背景调查模型**
