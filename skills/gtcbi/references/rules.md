@@ -65,7 +65,7 @@ When the current action involves contacting the target (a referral request, a ro
 
 ## Evidence and refresh
 
-Record evidence ID, entity/country, source URL/document ID, publisher/type, factual extract, publication date if known, actual check date, supported/opposed conclusion IDs, status, restrictions and refresh triggers. Separate assertion, inference, verified, unknown, conflict and inaccessible. Missing customs/review data is not zero purchasing or poor quality.
+Record evidence ID, entity/country, source URL/document ID, publisher/type, factual extract, publication date if known, actual check date, supported/opposed conclusion IDs, status, restrictions and refresh triggers. Separate assertion, inference, verified, unknown, conflict and inaccessible. Missing customs/review data is not zero purchasing or poor quality. For identity and domain checks, an optional list of registries, VIES, LEI and RDAP sources, with what each can and cannot show, is in [official sources](official-sources.md).
 
 Industry/country profiles configure freshness by data type. No universal expiry is invented. Trigger earlier checks for role changes, identity anomalies, customer replies, procurement signals and changed transaction conditions. Expired evidence remains historical; do not silently delete or change ratings.
 
