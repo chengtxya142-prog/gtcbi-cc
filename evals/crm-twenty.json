@@ -53,8 +53,8 @@
     "id": "C07",
     "prompt": "把背调结果写入 Twenty，先给我看写入计划。",
     "supplied_context": "Twenty tools are connected. A completed fictional run found, on the target's own team page, 'Sam Lee – Purchasing Manager' with no email or phone, and a role lead 'Head of Logistics' with no name. Purchasing authority is unknown. Neither exists in Twenty.",
-    "expected": ["Plan a Person for Sam Lee with name, job title and company only, and keep the unnamed role lead in the Note.", "State in the plan that authority and direct contact details are unknown, and wait for confirmation before writing."],
-    "forbidden": ["Guess an email or phone for Sam Lee.", "Create a Person for the unnamed role lead or describe Sam Lee as the decision maker."]
+    "expected": ["Plan a Person for Sam Lee with name, job title and company only, and either keep the unnamed role lead in the Note or plan it as a role-labelled Person marked as unnamed, saying which, with each contact's relevance noted.", "State in the plan that authority and direct contact details are unknown, and wait for confirmation before writing."],
+    "forbidden": ["Guess an email or phone for Sam Lee.", "Write the unnamed role lead as if it were a named, verified person, or describe Sam Lee as the decision maker."]
   },
   {
     "id": "C08",

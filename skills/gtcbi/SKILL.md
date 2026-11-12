@@ -3,12 +3,12 @@ name: gtcbi
 description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies, assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations. 适用于外贸找客户、开发客户、继续找一批候选、客户背调/背景调查、核实公司主体、联系人与采购路径核验、合作可行性判断、导出背调报告、把背调结果保存或同步到 Twenty CRM。
 compatibility: Works with any Agent Skills host (Codex, Claude Code, Claude.ai, Hermes, Gemini CLI). Web search/source reading depend on host tools; optional validators need Python 3.10+.
 metadata:
-  version: "2.0.4"
+  version: "2.0.5"
   author: chengtxya142-prog
   homepage: https://github.com/chengtxya142-prog/gtcbi-cc
 ---
 
-# Global Trade Customer Background Investigation V2.0.4
+# Global Trade Customer Background Investigation V2.0.5
 
 ## Entry
 
@@ -26,8 +26,8 @@ For prospect discovery or new named targets, read [discovery and execution gate]
 Read [operating rules](references/rules.md) before research and [output contract](references/output-contract.md) for delivery. For F1 identity and domain checks, [official sources](references/official-sources.md) is an optional starting list.
 
 1. Declare entity, country, scope, mode, required deliverables and source restrictions. Read existing records before researching.
-2. Verify identity first, including any operator-supplied email domain against the official domain; follow the pause rule for conflicts. Research business, procurement and timing; then choose a route based on evidence and gaps.
-3. Match depth to purpose. Preserve useful evidence. Budget exhaustion does not fulfill a required deliverable.
+2. Verify identity first, including every email domain to be used, from any source, against the official domain on the company's website or LinkedIn page; follow the pause rule for conflicts. Research business, procurement and timing; then choose a route based on evidence and gaps.
+3. Run a quick check first, present it and let the operator choose: save to CRM, pass to a deep check (remaining F2–F6) or stop. Deep work starts only on an explicit pass. Match depth to purpose. Preserve useful evidence. Budget exhaustion does not fulfill a required deliverable.
 4. Compare buyer conditions with seller capabilities. Separate facts, hypotheses, unknowns and conflicts. Report which action each gap affects.
 5. Independently report execution, deliverables, draft readiness, cooperation conditions and handoff. Default to no numerical score.
 6. Refresh only affected facts when new evidence arrives; preserve historical dates and judgments. Apply the execution gate to newly scoped research, not a pure export.
@@ -43,4 +43,4 @@ For optional structured JSON and offline checking, see [discovery record](refere
 
 ## 中文入口
 
-适用于跨行业 B2B 客户发现、客户背调、联系人路径核验、合作可行性判断和定向更新。发现或新指定客户先读[执行门](references/discovery-and-gate.md)；开始前必须先展示操作人画像卡（公司、行业、产品、目标市场、客户类型、合作目标）并取得明确确认，如“确认画像 PROFILE-r1”，任何模式都不能跳过；正式研究、交付、文案就绪、实际发送分别判断。禁止把未知当负面、把检索结束当取得目标、把岗位线索当已验证个人。需要把结果写入 Twenty CRM 时先读 [CRM 同步](references/crm-twenty.md)：单向写入，先展示写入计划并取得明确确认。
+适用于跨行业 B2B 客户发现、客户背调、联系人路径核验、合作可行性判断和定向更新。发现或新指定客户先读[执行门](references/discovery-and-gate.md)；开始前必须先展示操作人画像卡（公司、行业、产品、目标市场、客户类型、合作目标）并取得明确确认，如“确认画像 PROFILE-r1”，任何模式都不能跳过；正式研究先做快查，展示结果后由操作人选择写入 CRM、通过进入深查或停止，深查须明确通过；同一客户沿用同一 Run ID；正式研究、交付、文案就绪、实际发送分别判断。禁止把未知当负面、把检索结束当取得目标、把岗位线索当已验证个人。需要把结果写入 Twenty CRM 时先读 [CRM 同步](references/crm-twenty.md)：单向写入，先展示写入计划并取得明确确认。

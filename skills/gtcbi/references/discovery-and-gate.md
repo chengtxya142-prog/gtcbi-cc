@@ -1,4 +1,4 @@
-# Prospect discovery and execution gate — V2.0.4
+# Prospect discovery and execution gate — V2.0.5
 
 Discovery yields leads, selection marks intent, and final confirmation authorizes formal research for a specific set of targets and one configuration revision. None authorizes outreach.
 
@@ -68,7 +68,7 @@ The operator can select one or more candidates, confirm research, request a furt
 
 ## Hand off and track independently
 
-Create one distinct run per approved customer; fix the approved snapshot, scope and required deliverables. Recheck relevant tool/source access, read applicable records and follow the [existing F1–F6 sequence](rules.md#sequence-and-routing). Reuse applicable inspected discovery sources only after assessing entity, timing and support. A preliminary match reason is not a research conclusion.
+Create one distinct run per approved customer; fix the approved snapshot, scope and required deliverables. Recheck relevant tool/source access, read applicable records and follow the [existing F1–F6 sequence](rules.md#sequence-and-routing), starting with the quick check; the deep check needs the operator's explicit pass for that target. Reuse applicable inspected discovery sources only after assessing entity, timing and support. A preliminary match reason is not a research conclusion.
 
 Keep entry progress (profile pending, keywords pending, discovering, awaiting selection/start, approved) separate from each client's execution and from deliverables, draft readiness, cooperation conditions, actual handoff and export status. Follow the [formal output contract](output-contract.md). An optional outreach request produces a draft only; do not send, invite/connect, submit a form or write to a CRM as part of the workflow. Saving results to a CRM is a separate action with its own confirmation; see [Twenty CRM sync](crm-twenty.md). Drafting does not change sent, reply or meeting states.
 

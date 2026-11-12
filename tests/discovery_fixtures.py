@@ -3,7 +3,7 @@
 
 def discovery_fixture():
     return {
-        "model_version": "2.0.4",
+        "model_version": "2.0.5",
         "discovery_schema": "discovery-gate-v1",
         "synthetic": True,
         "discovery_id": "SYN-DISC-001",
