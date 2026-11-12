@@ -114,6 +114,7 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | [Operating rules](skills/gtcbi/references/rules.md) | 完整背调执行规则 |
 | [Output contract](skills/gtcbi/references/output-contract.md) | 交付内容与四表输出规范 |
 | [Twenty CRM sync](skills/gtcbi/references/crm-twenty.md) | 可选：把背调结果单向写入 Twenty CRM 的规则 |
+| [Official sources](skills/gtcbi/references/official-sources.md) | 可选：各国企业登记、欧盟 VIES、LEI、域名注册查询等官方核验来源清单 |
 | [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
 | [Examples](skills/gtcbi/examples/) · [Tests](tests/) · [Evals](evals/discovery-gate.json) | 合成示例、回归测试与行为场景 |
 | [Changelog](CHANGELOG.md) | 版本更新记录 |

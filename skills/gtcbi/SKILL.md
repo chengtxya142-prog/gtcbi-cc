@@ -23,7 +23,7 @@ For prospect discovery or new named targets, read [discovery and execution gate]
 
 ## Research and delivery
 
-Read [operating rules](references/rules.md) before research and [output contract](references/output-contract.md) for delivery.
+Read [operating rules](references/rules.md) before research and [output contract](references/output-contract.md) for delivery. For F1 identity and domain checks, [official sources](references/official-sources.md) is an optional starting list.
 
 1. Declare entity, country, scope, mode, required deliverables and source restrictions. Read existing records before researching.
 2. Verify identity first, including any operator-supplied email domain against the official domain; follow the pause rule for conflicts. Research business, procurement and timing; then choose a route based on evidence and gaps.
