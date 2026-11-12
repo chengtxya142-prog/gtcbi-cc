@@ -1,8 +1,10 @@
-# Operating rules / 执行规则 — V2.0.4
+# Operating rules / 执行规则 — V2.0.5
 
 ## Configuration and scope
 
 Use [discovery and execution gate](discovery-and-gate.md) for new research from discovery or named targets. Use the approved seller snapshot and record relevant MOQ/price/delivery/compliance/service capabilities, exclusions and language. Unknown seller capability is not a promise.
+
+**Run ID.** Use `RUN-{date of first run}-{candidate ID}`, e.g. `RUN-2026-11-11-CAND-002`; if candidate IDs could repeat across discovery tasks, prefix the discovery ID. Later quick or deep checks, refreshes and re-evaluations of the same target keep the same Run ID so the customer's history stays in one thread; each entry records its own check date, stage and profile revision. Open a new Run ID only for a different legal entity, or for a complete new investigation the operator asks for.
 
 Each run records an ID, model/profile versions, target legal entity and country, research goal, mode, required modules/deliverables, start/check dates, source restrictions, budget and stopping criteria. Scope changes require a reason; never silently narrow a task to claim completion.
 
@@ -22,6 +24,8 @@ Modes: quick admission; standard development; targeted verification; full invest
 Map by responsibility, not matching F numbers. A fact has one maintained owner; other modules reference its evidence ID.
 
 ## Sequence and routing
+
+**Two stages: quick check, then deep check.** After the start confirmation, run a quick check first: F1 identity (including email domains), basic business and product fit against the confirmed profile, the company entrance and any contacts found on the way, and obvious F5 risks. Present it with a recommendation (pass, park or stop), the main gaps and the contacts found with their relevance, then ask the operator to choose: save the quick result to the CRM (a separate confirmed write plan), pass the target to a deep check, or stop/park. One message may choose more than one, e.g. “写入 Twenty，并通过深查”. The deep check covers the remaining F2–F6 work (procurement and Why now, decision chain and backup routes, seller-buyer feasibility, next action and, on request, a draft) and starts only on an explicit pass for that target, unless the operator approved a deep check in the start confirmation itself. A target in `identity_conflict` cannot pass until the conflict is resolved. Every result and CRM Note names its stage (快查 / 深查), date and pass basis.
 
 After the applicable execution gate: read existing records → establish scope → F1 → F2/F3/company routes → lightweight personnel discovery → F5 routing → justified deeper work/F6 → delivery and action assessment → transaction checks when triggered → save/read back within authorized scope.
 
@@ -49,7 +53,13 @@ Identity/current employment, functional relevance, contact route and decision au
 
 Record person name, employer/entity/country, current role, relevance, authority status, work route, verified profile URL if obtained, evidence, date, restrictions and ranking. A company page is not a personal profile. Do not invent URLs or private contact details. Profile verified, connection available, invite sent and reply received are separate states.
 
-**Operator-supplied contacts.** When the operator supplies a contact (name, email, phone or signature), treat it as a claim to verify, not as evidence. As part of F1, compare the email domain with the target's official domain from its website or registry. If they differ, check, where accessible: the domain's registration date and registrar (public RDAP/WHOIS), its mail hosting (MX records), whether it serves a real website, and whether the company publishes an anti-fraud notice or an official list of email domains. A recent registration, consumer hosting, an empty site or an official statement excluding the domain is an `identity_conflict` that pauses the client; a group or regional domain the company itself documents is not. Record both domains, the facts found and their dates. Never contact the supplied address to test it, and never call it fraud: report the mismatch and the evidence. Recommend verification only through official channels the operator finds independently, not through details in the suspect message.
+**Email domain verification.** Every email address that will appear in a conclusion, contact route, draft or CRM record is checked, whatever its source: supplied by the operator, found from other operator information (a person or company name), or found in F1–F6 sources such as press releases, directories, databases, documents or signatures. First establish the official domain(s) from the company's own website (legal notice, contact page) and its official LinkedIn company page where publicly visible, cross-checked with the registry when available. Then compare each address's domain with them.
+
+- **Match:** record the address, where it was found and the check date.
+- **Mismatch:** check, where accessible, the domain's registration date and registrar (public RDAP/WHOIS), mail hosting (MX records), whether it serves a real website, and whether the company publishes an anti-fraud notice or a list of official email domains. A group or regional domain the company itself documents is not a conflict.
+- **Risk signs** (recent registration, consumer hosting, empty site, an official statement excluding the domain): if the address was supplied by the operator or used by someone contacting the operator in the company's name, label the client `identity_conflict` and pause it. If it was found during research, drop that address as a route, record why, and continue; it does not by itself pause the client.
+
+An address built from a naming pattern (e.g. first.last@domain) is a hypothesis, never a verified route. Never contact an address to test it, and never call it fraud: report the mismatch and the evidence. Recommend verification only through official channels found independently, not through details in a suspect message. Use only public or authorized access; do not bypass LinkedIn or other login walls.
 
 Lightweight discovery seeks relevant personnel plus company entrance; standard adds backups/referrals; full covers applicable decision, influence, execution and review functions. Configure roles/path coverage/budget by industry and organization. Count prior useful work toward deeper research. Stop when deliverables are adequately supported, or budget/access limits require a candid unresolved result; never manufacture searches to meet a quota.
 

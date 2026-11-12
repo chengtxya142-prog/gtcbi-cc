@@ -1,4 +1,4 @@
-# Output contract / 输出契约 — V2.0.4
+# Output contract / 输出契约 — V2.0.5
 
 Lead with follow / conditional follow / defer / stop, the main opportunity and risk, conditions for changing the decision, and the current action. State evidence limitations close to affected conclusions. Do not require a numerical score.
 
