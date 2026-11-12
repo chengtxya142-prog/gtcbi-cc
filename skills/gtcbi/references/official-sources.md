@@ -1,4 +1,4 @@
-# Official verification sources / 官方核验来源 — optional
+# Official verification sources / 官方核验来源 — V2.0.4 (optional)
 
 An optional starting list for F1 identity checks and for operator-supplied contacts. It is not required, not exhaustive and not a source quota: use what the host can actually reach, apply configured source exclusions first, and prefer the target's own country registry over aggregators. Addresses and access rules change; if a source is unreachable, record it as inaccessible and use another applicable one.
 

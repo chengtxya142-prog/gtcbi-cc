@@ -9,7 +9,7 @@ if __package__:
 else:
     from discovery_contract import validate_execution_state, validate_gate, validate_identity_pause
 
-VERSION = '2.0.3'
+VERSION = '2.0.4'
 
 
 def validate(run, as_of=None, require_gate=False):
@@ -29,7 +29,7 @@ def validate(run, as_of=None, require_gate=False):
     if issues:
         return issues
     if run.get('model_version') != VERSION:
-        add('VERSION', 'Expected model_version 2.0.3')
+        add('VERSION', 'Expected model_version 2.0.4')
     for key in ('run_id', 'mode', 'route'):
         if not isinstance(run.get(key), str) or not run[key].strip():
             add('SCHEMA', f'Missing {key}')
