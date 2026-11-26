@@ -3,12 +3,12 @@ name: gtcbi
 description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies, assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations. 适用于外贸找客户、开发客户、继续找一批候选、客户背调/背景调查、核实公司主体、联系人与采购路径核验、合作可行性判断、导出背调报告、把背调结果保存或同步到 Twenty CRM。
 compatibility: Works with any Agent Skills host (Codex, Claude Code, Claude.ai, Hermes, Gemini CLI). Web search/source reading depend on host tools; optional validators need Python 3.10+.
 metadata:
-  version: "2.0.6"
+  version: "2.0.7"
   author: chengtxya142-prog
   homepage: https://github.com/chengtxya142-prog/gtcbi-cc
 ---
 
-# Global Trade Customer Background Investigation V2.0.6
+# Global Trade Customer Background Investigation V2.0.7
 
 ## Entry
 
@@ -17,7 +17,7 @@ For prospect discovery or new named targets, read [discovery and execution gate]
 1. Check relevant host capabilities. Then confirm who the operator is: show the operator profile card (`PROFILE-r1`: company, industry, products, markets, customer types, cooperation objective) unchecked, prefilled only from retrievable defaults, and wait for explicit confirmation. No mode, named target or time pressure skips this; with no default, ask and wait. Edits change this run's snapshot, not the defaults.
 2. Recommend editable keywords or accept operator-only terms; obtain keyword confirmation before prospect discovery.
 3. Show ten candidates initially by default; require an explicit quantity for each additional batch. Show unchecked candidates with company, country, website, preliminary match reason and inspected discovery source.
-4. Wait for explicit selection plus final start confirmation before researching any candidate. A missing UI control is not permission: use candidate IDs and explicit textual confirmation.
+4. Wait for explicit selection plus final start confirmation before researching any candidate. A missing UI control is not permission: use candidate IDs and explicit textual confirmation. Where the host renders interactive forms, collect the profile card, candidate selection and manual candidates through the [intake forms](references/forms.md); the submitted text is the confirmation basis.
 5. For already named targets, use the same profile confirmation, configuration and execution gate without requiring a discovery batch. Export-only work bypasses new research.
 6. After approval, create one run per selected customer and continue the existing scoped F1–F6 workflow.
 
@@ -43,4 +43,4 @@ For optional structured JSON and offline checking, see [discovery record](refere
 
 ## 中文入口
 
-适用于跨行业 B2B 客户发现、客户背调、联系人路径核验、合作可行性判断和定向更新。发现或新指定客户先读[执行门](references/discovery-and-gate.md)；开始前必须先展示操作人画像卡（公司、行业、产品、目标市场、客户类型、合作目标）并取得明确确认，如“确认画像 PROFILE-r1”，任何模式都不能跳过；正式研究先做快查，展示结果后由操作人选择写入 CRM、通过进入深查或停止，深查须明确通过；同一客户沿用同一 Run ID；正式研究、交付、文案就绪、实际发送分别判断。禁止把未知当负面、把检索结束当取得目标、把岗位线索当已验证个人。社媒链接可作线索；用操作人已登录账号读取须先征得同意并遵守[社媒来源](references/social-sources.md)的频率与只读限制。需要把结果写入 Twenty CRM 时先读 [CRM 同步](references/crm-twenty.md)：单向写入，先展示写入计划并取得明确确认。
+适用于跨行业 B2B 客户发现、客户背调、联系人路径核验、合作可行性判断和定向更新。发现或新指定客户先读[执行门](references/discovery-and-gate.md)；开始前必须先展示操作人画像卡（公司、行业、产品、目标市场、客户类型、合作目标）并取得明确确认，如“确认画像 PROFILE-r1”，任何模式都不能跳过；正式研究先做快查，展示结果后由操作人选择写入 CRM、通过进入深查或停止，深查须明确通过；同一客户沿用同一 Run ID；正式研究、交付、文案就绪、实际发送分别判断。禁止把未知当负面、把检索结束当取得目标、把岗位线索当已验证个人。宿主支持交互表单时，画像卡、候选勾选和手动添加客户用[表单](references/forms.md)，提交原文即确认依据，否则用文字确认；社媒链接可作线索；用操作人已登录账号读取须先征得同意并遵守[社媒来源](references/social-sources.md)的频率与只读限制。需要把结果写入 Twenty CRM 时先读 [CRM 同步](references/crm-twenty.md)：单向写入，先展示写入计划并取得明确确认。

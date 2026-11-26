@@ -1,4 +1,4 @@
-# Social media leads and logged-in reading — V2.0.6
+# Social media leads and logged-in reading — V2.0.7
 
 Social media links (LinkedIn, Instagram, Facebook, TikTok, YouTube, X, Xiaohongshu, Douyin, Weibo and similar) can be leads, discovery sources or evidence. They never replace the official website and domain check in F1.
 
