@@ -1,4 +1,4 @@
-# Operating rules / 执行规则 — V2.0.5
+# Operating rules / 执行规则 — V2.0.6
 
 ## Configuration and scope
 
@@ -81,7 +81,7 @@ Industry/country profiles configure freshness by data type. No universal expiry 
 
 Record new feedback first, then refresh only affected facts, routing, feasibility, draft or next action. MOQ feedback ordinarily affects F3/F6; departure affects F4 and dependent drafts; entity conflict affects all dependent judgments. Preserve old/new values, source, scope and dates. Partial refresh does not reset the full-investigation date.
 
-Source applicability, access status and evidence quality are different fields. Apply confirmed source exclusions. Use public or authorized access; official login flow for gated sources, never request passwords, verification codes or session credentials. Read access does not authorize sending, posting, form submission or CRM writes. CRM writes happen only through the separately confirmed [Twenty CRM sync](crm-twenty.md). Reuse evidence, but allow necessary pagination and fresh checks.
+Source applicability, access status and evidence quality are different fields. Apply confirmed source exclusions. Use public or authorized access; official login flow for gated sources, never request passwords, verification codes or session credentials. Reading through the operator's own logged-in social accounts follows the consent, read-only and volume limits in [social sources](social-sources.md). Read access does not authorize sending, posting, form submission or CRM writes. CRM writes happen only through the separately confirmed [Twenty CRM sync](crm-twenty.md). Reuse evidence, but allow necessary pagination and fresh checks.
 
 ## Optional scoring
 
