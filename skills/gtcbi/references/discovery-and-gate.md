@@ -1,4 +1,4 @@
-# Prospect discovery and execution gate — V2.0.7
+# Prospect discovery and execution gate — V2.0.8
 
 Discovery yields leads, selection marks intent, and final confirmation authorizes formal research for a specific set of targets and one configuration revision. None authorizes outreach.
 
@@ -63,7 +63,7 @@ Display each new candidate unchecked with a stable ID and these five business fi
 The operator can select one or more candidates, confirm research, request a further batch with a count, stop discovery and retain the pool, add named targets to the same pool, or export it. Manual additions are not discovery batch results. Leave candidates pending by default; an unchecked candidate is not excluded.
 
 - Use blank real multiselect controls only if the host supports them and returns selection events; require a final start action. The form layout, validation and submission wording are in [intake forms](forms.md). Otherwise show static unchecked entries and use stable IDs plus explicit text, e.g. “选择 CAND-001、CAND-003，确认开始背调”. Do not pretend static Markdown is clickable or guess at control events. A selection and final start confirmation may be in the same message if the intended IDs are unambiguous.
-- Start formal research **only** when the current operator profile card and keyword pack are confirmed, the operator has explicitly selected at least one valid non-excluded candidate, and the operator explicitly confirms starting for exactly that set. Selection alone waits; do not begin even F1 or a preliminary formal check from supplied evidence. Viewing, adding, exporting, more search, editing keywords and silence are not approval.
+- Start formal research **only** when the current operator profile card is confirmed, the keyword pack is confirmed if the set includes discovered candidates (a set made only of operator-named or manually added targets needs no keyword pack), the operator has explicitly selected at least one valid non-excluded candidate, and the operator explicitly confirms starting for exactly that set. Selection alone waits; do not begin even F1 or a preliminary formal check from supplied evidence. Viewing, adding, exporting, more search, editing keywords and silence are not approval.
 - Capture the exact selected IDs, revision, actual confirmation basis and real timestamp if available. Do not invent times or operator quotes. If the set changes, get a fresh final confirmation; new candidates cannot inherit an earlier approval. Replaying the same confirmation never duplicates a run. [Optional JSON and checks](discovery-record.md) record real interactions; they do not create them.
 
 ## Hand off and track independently

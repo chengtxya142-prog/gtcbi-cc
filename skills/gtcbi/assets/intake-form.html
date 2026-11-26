@@ -1,4 +1,4 @@
-<!-- GTCBI intake form reference (V2.0.7). Edit PROFILE, REV and CANDIDATES in the script; keep the behaviour described in references/forms.md. Requires a host that provides sendPrompt(text) or an equivalent submit-to-chat call. -->
+<!-- GTCBI intake form reference (V2.0.8). Edit PROFILE, REV and CANDIDATES in the script; keep the behaviour described in references/forms.md. Requires a host that provides sendPrompt(text) or an equivalent submit-to-chat call. -->
 <h2 class="sr-only">GTCBI intake: operator profile form, candidate checklist and manual candidate entry. Each needs its own confirm action.</h2>
 <style>
 .g-card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
@@ -64,7 +64,7 @@
 const REV="PROFILE-r1";
 const PROFILE={co:"",ind:"",prod:"",mkt:"",cust:"",goal:""};
 const SUGGEST={cust:["分销商","批发商","品牌商","代理商"],goal:["长期合作","按项目合作","代理分销","先做试单"]};
-const KEYWORDS_CONFIRMED=true;
+const KEYWORDS_CONFIRMED=false;
 let CANDIDATES=[];
 const $=id=>document.getElementById(id);
 const PLAT=[["linkedin.com","LinkedIn"],["instagram.com","Instagram"],["facebook.com","Facebook"],["fb.com","Facebook"],["tiktok.com","TikTok"],["youtube.com","YouTube"],["youtu.be","YouTube"],["x.com","X"],["twitter.com","X"],["xiaohongshu.com","小红书"],["douyin.com","抖音"],["weibo.com","微博"]];
@@ -81,7 +81,7 @@ $("g_rev").textContent="画像卡 "+REV;
 PF.forEach(([id,k])=>{$(id).value=PROFILE[k]||"";$(id).addEventListener("input",()=>{$("perr").textContent="";if(pOk){pOk=false;$("pstate").textContent="已修改，需重新确认";gate()}})});
 $("dl_cust").innerHTML=SUGGEST.cust.map(v=>`<option value="${esc(v)}">`).join("");
 $("dl_goal").innerHTML=SUGGEST.goal.map(v=>`<option value="${esc(v)}">`).join("");
-function gate(){$("ccard").style.opacity=(pOk&&KEYWORDS_CONFIRMED)?1:0.5}
+function gate(){$("ccard").style.opacity=(pOk&&(KEYWORDS_CONFIRMED||CANDIDATES.every(c=>c.manual)))?1:0.5}
 $("pok").onclick=()=>{const miss=PF.filter(([id])=>!$(id).value.trim()).map(x=>x[2]);if(miss.length){$("perr").textContent="还没填：" +miss.join("、");return}pOk=true;$("pstate").textContent="已确认 "+REV;gate()};
 function render(){$("list").innerHTML=CANDIDATES.map(c=>`<label class="g-row"><input type="checkbox" value="${esc(c.id)}"><span>${esc(c.id)}</span><span>${c.name?esc(c.name):M}<br><span class="g-mut">${c.web?esc(c.web):"官网待核实"}</span>${c.mail?'<br><span class="g-mut">'+esc(c.mail)+"</span>":""}</span><span>${c.cty?esc(c.cty):M}${c.note?" · "+esc(c.note):""}<br>${badge(c.soc)}${c.soc?'<span class="g-mut" style="word-break:break-all">'+esc(c.soc.url)+"</span><br>":""}<span class="g-mut">${c.manual?"手动添加 · 操作人提供，未独立核实":esc(c.src||"")}</span></span></label>`).join("");document.querySelectorAll("#list input").forEach(b=>b.onchange=upd);upd()}
 function upd(){$("cstate").textContent="已选 "+document.querySelectorAll("#list input:checked").length+" 家，尚未开始";$("cerr").textContent=""}
@@ -95,12 +95,12 @@ $("madd").onclick=()=>{const v=i=>$(i).value.trim();const c={name:v("m_name"),we
   if(v("m_soc")){c.soc=social(v("m_soc"));if(!c.soc){$("merr").textContent="没认出这个社媒平台，可以填到官网栏";return}}
   if(!c.name&&!c.web&&!c.mail&&!c.soc){$("merr").textContent="公司名、官网、社媒链接、邮箱至少填一项";return}
   const d=add(c);if(d){$("merr").textContent="已在清单中："+d+"，没有重复添加";return}
-  ["m_name","m_web","m_soc","m_mail","m_cty","m_note"].forEach(i=>$(i).value="");render()};
+  ["m_name","m_web","m_soc","m_mail","m_cty","m_note"].forEach(i=>$(i).value="");render();gate()};
 $("bulk").addEventListener("input",()=>$("berr").textContent="");
 $("badd").onclick=()=>{const lines=$("bulk").value.split("\n").map(s=>s.trim()).filter(Boolean);if(!lines.length){$("berr").textContent="先粘贴至少一行";return}
-  const dupes=[];lines.forEach(l=>{const d=add(parse(l));if(d)dupes.push(d)});$("bulk").value="";render();if(dupes.length)$("berr").textContent="有 "+dupes.length+" 行与已有候选重复，已跳过："+dupes.join("、")};
-$("cgo").onclick=()=>{if(!pOk){$("cerr").textContent="先确认上面的画像卡";return}if(!KEYWORDS_CONFIRMED){$("cerr").textContent="关键词包还没确认";return}
-  const s=[...document.querySelectorAll("#list input:checked")].map(b=>b.value);if(!s.length){$("cerr").textContent="至少勾选一家再开始";return}
+  const dupes=[];lines.forEach(l=>{const d=add(parse(l));if(d)dupes.push(d)});$("bulk").value="";render();gate();if(dupes.length)$("berr").textContent="有 "+dupes.length+" 行与已有候选重复，已跳过："+dupes.join("、")};
+$("cgo").onclick=()=>{if(!pOk){$("cerr").textContent="先确认上面的画像卡";return}const s=[...document.querySelectorAll("#list input:checked")].map(b=>b.value);
+  if(!KEYWORDS_CONFIRMED&&CANDIDATES.some(c=>!c.manual&&s.includes(c.id))){$("cerr").textContent="选中了搜索得到的候选，关键词包还没确认";return}if(!s.length){$("cerr").textContent="至少勾选一家再开始";return}
   const v=id=>$(id).value.trim();
   const manual=CANDIDATES.filter(c=>c.manual&&s.includes(c.id)).map(c=>c.id+"="+[c.name,c.web,c.soc&&c.soc.url,c.mail,c.cty].filter(Boolean).join(" / ")).join("；");
   sendPrompt("确认画像 "+REV+"："+PF.map(([id,,l])=>l+"="+v(id)).join("；")+"。"+(manual?"手动添加："+manual+"。":"")+"选择 "+s.join("、")+"，确认开始背调。")};

@@ -1,4 +1,4 @@
-# Optional CRM sync: Twenty — V2.0.7
+# Optional CRM sync: Twenty — V2.0.8
 
 Saving GTCBI results into a [Twenty](https://twenty.com) workspace is an optional, separate action. It is never part of discovery, selection or research approval, and it is one-way: GTCBI results go into Twenty. Twenty records do not select candidates, approve research or change GTCBI conclusions.
 
