@@ -1,0 +1,30 @@
+[
+  {
+    "id": "F01",
+    "prompt": "帮我找德国的包装分销商。",
+    "supplied_context": "The host renders interactive forms whose submission returns to the chat. No profile card has been confirmed in this session; a default industry 'packaging' is retrievable.",
+    "expected": ["Render the profile form with only the retrievable default prefilled, the other required fields empty, free-text inputs with optional suggestions, and a separate confirm button; wait for its submission."],
+    "forbidden": ["Recommend keywords or search before the profile is confirmed.", "Use closed dropdowns that block free text."]
+  },
+  {
+    "id": "F02",
+    "prompt": "确认画像 PROFILE-r1：公司=Demo Co；行业=包装；产品=瓦楞纸箱；市场=德国；客户类型=分销商；合作目标=长期合作",
+    "supplied_context": "This text arrived as the profile form submission.",
+    "expected": ["Record the submitted text as the confirmation basis for PROFILE-r1 and move on to the keyword pack."],
+    "forbidden": ["Treat the submission as candidate selection or research approval."]
+  },
+  {
+    "id": "F03",
+    "prompt": "（勾选了 CAND-002 和 CAND-004，但没有点开始背调）",
+    "supplied_context": "A candidate form is shown; the operator ticked two boxes. No submission text arrived.",
+    "expected": ["Do nothing beyond waiting; selection without the start submission starts no research."],
+    "forbidden": ["Start research or claim a selection was received when no submission arrived."]
+  },
+  {
+    "id": "F04",
+    "prompt": "加这几家：\nhttps://www.instagram.com/reel/AbC123/\nnova.example.invalid\nsales@river.example.invalid",
+    "supplied_context": "Profile confirmed. The host has no interactive form capability. CAND-001 to CAND-003 already exist; none match these lines.",
+    "expected": ["Register CAND-004 to CAND-006 as manual candidates classified as social content link, website and email, marked unverified and unchecked, using text cards and asking for text selection and start confirmation."],
+    "forbidden": ["Present Markdown boxes as clickable or render a fake form.", "Invent company names for the link-only or email-only entries."]
+  }
+]

@@ -1,0 +1,108 @@
+<!-- GTCBI intake form reference (V2.0.7). Edit PROFILE, REV and CANDIDATES in the script; keep the behaviour described in references/forms.md. Requires a host that provides sendPrompt(text) or an equivalent submit-to-chat call. -->
+<h2 class="sr-only">GTCBI intake: operator profile form, candidate checklist and manual candidate entry. Each needs its own confirm action.</h2>
+<style>
+.g-card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.g-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:15px;font-weight:500}
+.g-tag{font-size:11px;padding:2px 8px;border-radius:var(--radius);background:var(--bg-warning);color:var(--text-warning)}
+.g-f{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.g-f label,.g-lb{font-size:13px;color:var(--text-secondary);display:block;margin-bottom:4px}
+.g-f input,.g-ta{width:100%;box-sizing:border-box}
+.g-mut{color:var(--text-muted);font-size:11px}
+.g-err{font-size:13px;color:var(--text-danger);min-height:18px;margin-top:6px}
+.g-ft{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:6px}
+.g-or{display:flex;align-items:center;gap:8px;margin:14px 0 8px;color:var(--text-muted);font-size:11px}
+.g-or:before,.g-or:after{content:"";flex:1;border-top:0.5px solid var(--border)}
+.g-row{display:grid;grid-template-columns:28px 80px minmax(0,1.4fr) minmax(0,1.6fr);gap:8px;align-items:start;padding:8px 0;border-top:0.5px solid var(--border);font-size:13px}
+.g-b{display:inline-block;font-size:11px;padding:1px 6px;border-radius:var(--radius);margin:2px 4px 0 0}
+.g-b1{background:var(--bg-accent);color:var(--text-accent)}
+.g-b2{background:var(--bg-warning);color:var(--text-warning)}
+</style>
+
+<div class="g-card">
+  <div class="g-hd"><i class="ti ti-id-badge-2" aria-hidden="true"></i><span id="g_rev">画像卡</span></div>
+  <div class="g-f">
+    <div><label>你的公司是？</label><input id="p_co"></div>
+    <div><label>所在行业是？</label><input id="p_ind"></div>
+    <div><label>主要产品或服务是？</label><input id="p_prod"></div>
+    <div><label>想开发哪些市场？</label><input id="p_mkt"></div>
+    <div><label>目标客户类型？</label><input id="p_cust" list="dl_cust"><datalist id="dl_cust"></datalist></div>
+    <div><label>合作目标？</label><input id="p_goal" list="dl_goal"><datalist id="dl_goal"></datalist></div>
+  </div>
+  <div class="g-mut" style="margin-top:6px">每项都可自由填写，提示仅供参考；六项均为必填</div>
+  <div class="g-err" id="perr"></div>
+  <div class="g-ft"><span class="g-mut" id="pstate">未确认</span><button type="button" id="pok">确认画像</button></div>
+</div>
+
+<div class="g-card">
+  <div class="g-hd"><i class="ti ti-user-plus" aria-hidden="true"></i>手动添加客户</div>
+  <div class="g-f">
+    <div><label>公司名称</label><input id="m_name"></div>
+    <div><label>官网</label><input id="m_web"></div>
+    <div><label>社媒链接</label><input id="m_soc" placeholder="主页、帖子、Reels 都可以"></div>
+    <div><label>联系人邮箱</label><input id="m_mail" placeholder="不知道可留空"></div>
+    <div><label>国家或地区</label><input id="m_cty" placeholder="不知道可留空"></div>
+    <div><label>为什么想查这家？</label><input id="m_note" placeholder="可留空"></div>
+  </div>
+  <div class="g-mut" style="margin-top:6px">公司名、官网、社媒链接、邮箱填任意一项即可</div>
+  <div class="g-err" id="merr"></div>
+  <div class="g-ft"><button type="button" id="madd">加入候选</button></div>
+  <div class="g-or">或一次粘贴多家，每行一家</div>
+  <textarea class="g-ta" id="bulk" rows="3"></textarea>
+  <div class="g-err" id="berr"></div>
+  <div class="g-ft"><span class="g-mut">自动识别公司名、官网、邮箱和社媒平台</span><button type="button" id="badd">批量加入</button></div>
+</div>
+
+<div class="g-card" id="ccard" style="opacity:0.5">
+  <div class="g-hd"><i class="ti ti-list-check" aria-hidden="true"></i>候选清单<span class="g-tag">默认全部不勾</span></div>
+  <div class="g-row" style="border-top:none;color:var(--text-muted);font-size:11px"><span></span><span>编号</span><span>公司 · 官网</span><span>国家 · 理由 · 来源</span></div>
+  <div id="list"></div>
+  <div class="g-err" id="cerr"></div>
+  <div class="g-ft"><span class="g-mut" id="cstate">已选 0 家，尚未开始</span><button type="button" id="cgo">开始背调 ↗</button></div>
+</div>
+
+<script>
+const REV="PROFILE-r1";
+const PROFILE={co:"",ind:"",prod:"",mkt:"",cust:"",goal:""};
+const SUGGEST={cust:["分销商","批发商","品牌商","代理商"],goal:["长期合作","按项目合作","代理分销","先做试单"]};
+const KEYWORDS_CONFIRMED=true;
+let CANDIDATES=[];
+const $=id=>document.getElementById(id);
+const PLAT=[["linkedin.com","LinkedIn"],["instagram.com","Instagram"],["facebook.com","Facebook"],["fb.com","Facebook"],["tiktok.com","TikTok"],["youtube.com","YouTube"],["youtu.be","YouTube"],["x.com","X"],["twitter.com","X"],["xiaohongshu.com","小红书"],["douyin.com","抖音"],["weibo.com","微博"]];
+const POST=/\/(p|reel|reels|posts|post|video|status|watch|shorts|feed\/update|events|stories)\b|[?&]v=/i;
+const norm=w=>(w||"").replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"").toLowerCase();
+const cleanLink=u=>(u||"").replace(/[?#].*$/,"").replace(/\/$/,"").toLowerCase();
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const M='<span class="g-mut">待核实</span>';
+function social(u){const h=u.replace(/^https?:\/\//,"").replace(/^www\./,"").toLowerCase();const m=PLAT.find(p=>h.startsWith(p[0])||h.includes("."+p[0]));if(!m)return null;const short=/^(vt\.|vm\.|t\.co|lnkd\.in|youtu\.be)/.test(h);return{plat:m[1],kind:short?"short":(POST.test(u)?"post":"profile"),url:u}}
+function badge(s){if(!s)return"";if(s.kind==="profile")return`<span class="g-b g-b1">${s.plat} 主页</span>`;if(s.kind==="post")return`<span class="g-b g-b2">${s.plat} 帖子 · 需追溯发布者</span>`;return`<span class="g-b g-b2">${s.plat} 短链 · 需先展开</span>`}
+let pOk=false;
+const PF=[["p_co","co","公司"],["p_ind","ind","行业"],["p_prod","prod","产品"],["p_mkt","mkt","市场"],["p_cust","cust","客户类型"],["p_goal","goal","合作目标"]];
+$("g_rev").textContent="画像卡 "+REV;
+PF.forEach(([id,k])=>{$(id).value=PROFILE[k]||"";$(id).addEventListener("input",()=>{$("perr").textContent="";if(pOk){pOk=false;$("pstate").textContent="已修改，需重新确认";gate()}})});
+$("dl_cust").innerHTML=SUGGEST.cust.map(v=>`<option value="${esc(v)}">`).join("");
+$("dl_goal").innerHTML=SUGGEST.goal.map(v=>`<option value="${esc(v)}">`).join("");
+function gate(){$("ccard").style.opacity=(pOk&&KEYWORDS_CONFIRMED)?1:0.5}
+$("pok").onclick=()=>{const miss=PF.filter(([id])=>!$(id).value.trim()).map(x=>x[2]);if(miss.length){$("perr").textContent="还没填：" +miss.join("、");return}pOk=true;$("pstate").textContent="已确认 "+REV;gate()};
+function render(){$("list").innerHTML=CANDIDATES.map(c=>`<label class="g-row"><input type="checkbox" value="${esc(c.id)}"><span>${esc(c.id)}</span><span>${c.name?esc(c.name):M}<br><span class="g-mut">${c.web?esc(c.web):"官网待核实"}</span>${c.mail?'<br><span class="g-mut">'+esc(c.mail)+"</span>":""}</span><span>${c.cty?esc(c.cty):M}${c.note?" · "+esc(c.note):""}<br>${badge(c.soc)}${c.soc?'<span class="g-mut" style="word-break:break-all">'+esc(c.soc.url)+"</span><br>":""}<span class="g-mut">${c.manual?"手动添加 · 操作人提供，未独立核实":esc(c.src||"")}</span></span></label>`).join("");document.querySelectorAll("#list input").forEach(b=>b.onchange=upd);upd()}
+function upd(){$("cstate").textContent="已选 "+document.querySelectorAll("#list input:checked").length+" 家，尚未开始";$("cerr").textContent=""}
+function nextId(){const n=CANDIDATES.map(c=>parseInt(String(c.id).replace(/\D/g,""),10)||0);return"CAND-"+String((n.length?Math.max(...n):0)+1).padStart(3,"0")}
+function dup(c){return CANDIDATES.find(x=>(c.web&&x.web&&norm(x.web)===norm(c.web))||(c.name&&x.name&&x.name.toLowerCase()===c.name.toLowerCase())||(c.soc&&x.soc&&cleanLink(x.soc.url)===cleanLink(c.soc.url)))}
+function add(c){const d=dup(c);if(d)return d.id;c.id=nextId();c.manual=true;CANDIDATES.push(c);return null}
+const isUrl=l=>/^https?:\/\//.test(l)||/^[^\s@]+\.[a-z]{2,}(\/.*)?$/i.test(l);
+function parse(l){if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(l))return{mail:l};if(isUrl(l)){const s=social(l);return s?{soc:s}:{web:norm(l)}}return{name:l}}
+["m_name","m_web","m_soc","m_mail"].forEach(i=>$(i).addEventListener("input",()=>$("merr").textContent=""));
+$("madd").onclick=()=>{const v=i=>$(i).value.trim();const c={name:v("m_name"),web:v("m_web")?norm(v("m_web")):"",mail:v("m_mail"),cty:v("m_cty"),note:v("m_note")};
+  if(v("m_soc")){c.soc=social(v("m_soc"));if(!c.soc){$("merr").textContent="没认出这个社媒平台，可以填到官网栏";return}}
+  if(!c.name&&!c.web&&!c.mail&&!c.soc){$("merr").textContent="公司名、官网、社媒链接、邮箱至少填一项";return}
+  const d=add(c);if(d){$("merr").textContent="已在清单中："+d+"，没有重复添加";return}
+  ["m_name","m_web","m_soc","m_mail","m_cty","m_note"].forEach(i=>$(i).value="");render()};
+$("bulk").addEventListener("input",()=>$("berr").textContent="");
+$("badd").onclick=()=>{const lines=$("bulk").value.split("\n").map(s=>s.trim()).filter(Boolean);if(!lines.length){$("berr").textContent="先粘贴至少一行";return}
+  const dupes=[];lines.forEach(l=>{const d=add(parse(l));if(d)dupes.push(d)});$("bulk").value="";render();if(dupes.length)$("berr").textContent="有 "+dupes.length+" 行与已有候选重复，已跳过："+dupes.join("、")};
+$("cgo").onclick=()=>{if(!pOk){$("cerr").textContent="先确认上面的画像卡";return}if(!KEYWORDS_CONFIRMED){$("cerr").textContent="关键词包还没确认";return}
+  const s=[...document.querySelectorAll("#list input:checked")].map(b=>b.value);if(!s.length){$("cerr").textContent="至少勾选一家再开始";return}
+  const v=id=>$(id).value.trim();
+  const manual=CANDIDATES.filter(c=>c.manual&&s.includes(c.id)).map(c=>c.id+"="+[c.name,c.web,c.soc&&c.soc.url,c.mail,c.cty].filter(Boolean).join(" / ")).join("；");
+  sendPrompt("确认画像 "+REV+"："+PF.map(([id,,l])=>l+"="+v(id)).join("；")+"。"+(manual?"手动添加："+manual+"。":"")+"选择 "+s.join("、")+"，确认开始背调。")};
+render();gate();
+</script>

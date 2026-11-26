@@ -1,4 +1,4 @@
-# Prospect discovery and execution gate — V2.0.6
+# Prospect discovery and execution gate — V2.0.7
 
 Discovery yields leads, selection marks intent, and final confirmation authorizes formal research for a specific set of targets and one configuration revision. None authorizes outreach.
 
@@ -28,7 +28,7 @@ Display the card unchecked, the same way candidates are displayed, with a stable
 
 - The first six fields are required. Fill only what is retrievable from a known default or supplied by the operator, and name that source. Mark every other field `未提供` and ask for it; never guess a field from the target's industry, an email signature or earlier conversations about other companies. Unknown constraints stay `未知`; they do not block confirmation.
 - With no retrievable default, say so, show the empty card and wait for the operator's answers. Registering a named target as a candidate may happen meanwhile; nothing else may.
-- Confirmation is explicit text for exactly that card, e.g. “确认画像 PROFILE-r1”. Viewing the card, naming a target, selecting candidates or silence is not confirmation. One message may confirm the profile, select candidates and confirm the start if each part is unambiguous. Record the actual basis in `profile_confirmation`.
+- Confirmation is explicit text for exactly that card, e.g. “确认画像 PROFILE-r1”. On a host with [intake forms](forms.md), the submitted profile form text naming the revision and every field is that confirmation. Viewing the card, naming a target, selecting candidates or silence is not confirmation. One message may confirm the profile, select candidates and confirm the start if each part is unambiguous. Record the actual basis in `profile_confirmation`.
 - Within the same session an already confirmed, unchanged profile is reused: restate its ID and one-line summary instead of asking again. Any edit produces a new revision (`PROFILE-r2`) that needs its own confirmation.
 - A confirmed card is this run's snapshot, not a saved default. Save or change a persistent default only on a distinct explicit request and only in the host's private storage, never in the public repository; without such storage, ask again in the next session.
 - Not required for: exporting existing records, continuing an already approved run within its scope, or a CRM sync of finished results.
@@ -62,7 +62,7 @@ Display each new candidate unchecked with a stable ID and these five business fi
 
 The operator can select one or more candidates, confirm research, request a further batch with a count, stop discovery and retain the pool, add named targets to the same pool, or export it. Manual additions are not discovery batch results. Leave candidates pending by default; an unchecked candidate is not excluded.
 
-- Use blank real multiselect controls only if the host supports them and returns selection events; require a final start action. Otherwise show static unchecked entries and use stable IDs plus explicit text, e.g. “选择 CAND-001、CAND-003，确认开始背调”. Do not pretend static Markdown is clickable or guess at control events. A selection and final start confirmation may be in the same message if the intended IDs are unambiguous.
+- Use blank real multiselect controls only if the host supports them and returns selection events; require a final start action. The form layout, validation and submission wording are in [intake forms](forms.md). Otherwise show static unchecked entries and use stable IDs plus explicit text, e.g. “选择 CAND-001、CAND-003，确认开始背调”. Do not pretend static Markdown is clickable or guess at control events. A selection and final start confirmation may be in the same message if the intended IDs are unambiguous.
 - Start formal research **only** when the current operator profile card and keyword pack are confirmed, the operator has explicitly selected at least one valid non-excluded candidate, and the operator explicitly confirms starting for exactly that set. Selection alone waits; do not begin even F1 or a preliminary formal check from supplied evidence. Viewing, adding, exporting, more search, editing keywords and silence are not approval.
 - Capture the exact selected IDs, revision, actual confirmation basis and real timestamp if available. Do not invent times or operator quotes. If the set changes, get a fresh final confirmation; new candidates cannot inherit an earlier approval. Replaying the same confirmation never duplicates a run. [Optional JSON and checks](discovery-record.md) record real interactions; they do not create them.
 
