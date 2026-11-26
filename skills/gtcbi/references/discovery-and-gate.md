@@ -1,11 +1,11 @@
-# Prospect discovery and execution gate — V2.0.5
+# Prospect discovery and execution gate — V2.0.6
 
 Discovery yields leads, selection marks intent, and final confirmation authorizes formal research for a specific set of targets and one configuration revision. None authorizes outreach.
 
 ## Route the request and check capabilities
 
 - For new prospect discovery, check the host's authorized search, source reading, interaction and file capabilities, then confirm the configuration below. Checking capability is not prospect research. Do not assume a provider, a working multiselect, or a save/export facility.
-- For named targets, use the same operator profile confirmation, configuration and approval gate, but add the supplied targets manually; do not force a discovery batch. A company name alone is not final approval. Show its candidate ID and mark unsupplied or unverified facts as such; do not invent a discovery source. Give it the next unused sequential candidate ID, and ask for any known country or website because F1 identity checks need them; missing values do not block registration or the gate.
+- For named targets, use the same operator profile confirmation, configuration and approval gate, but add the supplied targets manually; do not force a discovery batch. A company name alone is not final approval. Show its candidate ID and mark unsupplied or unverified facts as such; do not invent a discovery source. Give it the next unused sequential candidate ID, and ask for any known country or website because F1 identity checks need them; missing values do not block registration or the gate. A company name, website, email or social media link (profile or post) is each enough to register a manual candidate; handle social links as in [social sources](social-sources.md).
 - To continue an already approved run or refresh affected facts within its existing target, configuration and scope, reuse that run's approved snapshot and evidence. New targets, material configuration changes and new research scope require current approval; historical records alone do not establish that approval.
 - For candidate-list or existing-report export only, use the existing records; do not discover prospects, request new approval or restart research. Preserve original dates, scope and statuses. If a required capability is unavailable, report exactly what could not be done. Distinguish a record in the conversation from an actually saved file or export. In a candidate-list export, label a tentative selection as selected but not approved, so the file is never read as research authorization.
 

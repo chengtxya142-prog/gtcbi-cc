@@ -1,4 +1,4 @@
-# GTCBI · V2.0.5
+# GTCBI · V2.0.6
 
 **Global Trade Customer Background Investigation**  
 **全球外贸客户背景调查模型**
@@ -113,6 +113,7 @@ GTCBI 是面向外贸销售与商务拓展的**跨行业 B2B 客户发现与背�
 | [Discovery & approval](skills/gtcbi/references/discovery-and-gate.md) | 客户发现、选择和启动确认规则 |
 | [Operating rules](skills/gtcbi/references/rules.md) | 完整背调执行规则 |
 | [Output contract](skills/gtcbi/references/output-contract.md) | 交付内容与四表输出规范 |
+| [Social sources](skills/gtcbi/references/social-sources.md) | 社媒链接作为线索、使用操作人登录账号读取的同意与防封号限制 |
 | [Twenty CRM sync](skills/gtcbi/references/crm-twenty.md) | 可选：把背调结果单向写入 Twenty CRM 的规则 |
 | [Official sources](skills/gtcbi/references/official-sources.md) | 可选：各国企业登记、欧盟 VIES、LEI、域名注册查询等官方核验来源清单 |
 | [Structured records](skills/gtcbi/references/discovery-record.md) | 可选结构化记录与离线校验说明 |
