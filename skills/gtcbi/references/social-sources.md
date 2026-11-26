@@ -1,4 +1,4 @@
-# Social media leads and logged-in reading — V2.0.7
+# Social media leads and logged-in reading — V2.0.8
 
 Social media links (LinkedIn, Instagram, Facebook, TikTok, YouTube, X, Xiaohongshu, Douyin, Weibo and similar) can be leads, discovery sources or evidence. They never replace the official website and domain check in F1.
 
@@ -7,7 +7,7 @@ Social media links (LinkedIn, Instagram, Facebook, TikTok, YouTube, X, Xiaohongs
 - Accept a profile link, a post/reel/video link or a short link as a manual candidate's only lead, the same as a company name, website or email. Record the platform and the link type: **profile** (company page, account, channel) or **content** (post, reel, video, story, event).
 - A profile is close to the company but is not its website. From it, find the official website and domain, then verify identity as usual.
 - A content link only shows where the operator saw something. First identify who published it (the company itself, a distributor, agency, media outlet, employee or unrelated person), then go from that account to the official website. Do not treat claims in a post as company facts; record them as source assertions with the link and date.
-- Expand short links (e.g. `vt.tiktok.com`, `lnkd.in`, `t.co`, `youtu.be`) before classifying them. A redirect to an unrelated site is a risk signal, not a lead.
+- Before approval, classify links from the URL alone and do not open them; label a short link (e.g. `vt.tiktok.com`, `lnkd.in`, `t.co`, `youtu.be`) as "需先展开 / expand first". Expanding links and tracing publishers belong to F1 after the start confirmation. A redirect to an unrelated site is a risk signal, not a lead.
 - Deduplicate by normalized link (without tracking parameters) as well as by name and domain.
 
 ## Reading order
@@ -26,8 +26,8 @@ This is the operator's own access, not a bypass, but platforms such as LinkedIn 
 - **Read only.** Do not like, follow, connect, comment, message, post, join, save, react, accept requests or change any setting. Do not click ads or "contact" buttons.
 - **Keep volume low.** Per customer and platform, read only the pages needed (normally the company page, its about/people section and the specific posts supplied, at most about 10 page views). Across all customers, stay within about 30 page views per platform per session. Scroll at most a few screens per page; do not page through search results or follower lists in bulk.
 - **Go slowly.** Leave several seconds (about 10 or more) between page loads, and do not open many tabs on the same platform at once.
-- **Mind people's profiles.** On LinkedIn, viewing a person's profile while logged in can notify them. Prefer the company page; open individual profiles only when a contact needs verifying and the operator has agreed.
-- **Stop on warnings.** On any CAPTCHA, security check, "unusual activity" notice, rate-limit message or forced logout, stop reading that platform immediately, tell the operator what appeared, and do not retry, switch accounts or try another route around it. Do not use proxies, multiple accounts or anti-detection tricks.
+- **Mind people's profiles.** On LinkedIn, viewing a person's profile while logged in can notify them. Prefer the company page; open individual profiles only when a contact needs verifying and the operator has agreed, either to those named people in advance or person by person.
+- **Stop on warnings.** On any CAPTCHA, security check, "unusual activity" notice, rate-limit message or forced logout, stop reading that platform immediately, tell the operator what appeared, and do not retry, switch accounts or try another route around it. Resume only if the operator has cleared the check themselves and explicitly asks to continue; then go more slowly, and on a second warning stop that platform for the rest of the session. Do not use proxies, multiple accounts or anti-detection tricks.
 - **Keep only what is needed.** Record the specific facts used as evidence with link, date and "seen via operator's logged-in account". Do not bulk copy or export profiles, follower lists or comments, and keep private personal data out of the repository.
 
 ## Not used
