@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.9
+
+- **修复（表单未显示）：** Claude 桌面版 Code 页面实测中，技能没有发现内嵌组件工具，退回了文字表格。`forms.md` 新增明确的检测步骤：每次显示画像卡前检查能否渲染内嵌组件（Claude 桌面版和 claude.ai 的 `show_widget` 常为延迟加载，须先搜索“widget/visualize”并加载），找到就用 `assets/intake-form.html` 渲染；Codex、未支持 MCP Apps 的 Gemini / Antigravity 和命令行宿主仍用文字卡片。`SKILL.md` 入口同步提示。
+- **调整（参考表单）：** 去掉 `intake-form.html` 开头的 HTML 注释（组件工具不接受注释），用法说明移至 `forms.md`；已在 Claude 桌面版中实际渲染确认。
+
 ## 2.0.8
 
 - **评估：** 由不读取评估答案的独立代理盲测回放 F01–F04 和 S01–S04，8 个场景全部符合 expected，未出现 forbidden 行为。
