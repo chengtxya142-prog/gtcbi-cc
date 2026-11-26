@@ -3,12 +3,12 @@ name: gtcbi
 description: Use when finding B2B prospects or continuing a candidate list, researching or updating named companies, assessing supplier-buyer fit, verifying business contact paths, or exporting evidence-backed customer investigations. 适用于外贸找客户、开发客户、继续找一批候选、客户背调/背景调查、核实公司主体、联系人与采购路径核验、合作可行性判断、导出背调报告、把背调结果保存或同步到 Twenty CRM。
 compatibility: Works with any Agent Skills host (Codex, Claude Code, Claude.ai, Hermes, Gemini CLI). Web search/source reading depend on host tools; optional validators need Python 3.10+.
 metadata:
-  version: "2.0.8"
+  version: "2.0.9"
   author: chengtxya142-prog
   homepage: https://github.com/chengtxya142-prog/gtcbi-cc
 ---
 
-# Global Trade Customer Background Investigation V2.0.8
+# Global Trade Customer Background Investigation V2.0.9
 
 ## Entry
 
@@ -17,7 +17,7 @@ For prospect discovery or new named targets, read [discovery and execution gate]
 1. Check relevant host capabilities. Then confirm who the operator is: show the operator profile card (`PROFILE-r1`: company, industry, products, markets, customer types, cooperation objective) unchecked, prefilled only from retrievable defaults, and wait for explicit confirmation. No mode, named target or time pressure skips this; with no default, ask and wait. Edits change this run's snapshot, not the defaults.
 2. Recommend editable keywords or accept operator-only terms; obtain keyword confirmation before prospect discovery.
 3. Show ten candidates initially by default; require an explicit quantity for each additional batch. Show unchecked candidates with company, country, website, preliminary match reason and inspected discovery source.
-4. Wait for explicit selection plus final start confirmation before researching any candidate. A missing UI control is not permission: use candidate IDs and explicit textual confirmation. Where the host renders interactive forms, collect the profile card, candidate selection and manual candidates through the [intake forms](references/forms.md); the submitted text is the confirmation basis.
+4. Wait for explicit selection plus final start confirmation before researching any candidate. A missing UI control is not permission: use candidate IDs and explicit textual confirmation. Before showing the profile card, check for an inline widget tool (in Claude apps it may be deferred; search for it) as described in [intake forms](references/forms.md). Where the host renders interactive forms, collect the profile card, candidate selection and manual candidates through the [intake forms](references/forms.md); the submitted text is the confirmation basis.
 5. For already named targets, use the same profile confirmation, configuration and execution gate without requiring a discovery batch. Export-only work bypasses new research.
 6. After approval, create one run per selected customer and continue the existing scoped F1–F6 workflow.
 

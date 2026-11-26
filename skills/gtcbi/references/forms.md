@@ -1,10 +1,16 @@
-# Interactive intake forms — V2.0.8
+# Interactive intake forms — V2.0.9
 
-When the host can render an interactive form whose submission comes back to the conversation (for example an inline widget whose submit sends a message, as in the Claude desktop app or claude.ai), present the operator profile card, the candidate list and manual candidate entry as forms. Otherwise use the text cards and explicit text confirmations in [discovery and execution gate](discovery-and-gate.md). Forms change how input is collected, never what counts as confirmation.
+When the host can render an interactive form whose submission comes back to the conversation (see the capability check below; in the Claude desktop app and claude.ai this is the inline widget tool), present the operator profile card, the candidate list and manual candidate entry as forms. Otherwise use the text cards and explicit text confirmations in [discovery and execution gate](discovery-and-gate.md). Forms change how input is collected, never what counts as confirmation.
 
-[`assets/intake-form.html`](../assets/intake-form.html) is a working reference implementation; adapt its data and labels, keep its behaviour.
+[`assets/intake-form.html`](../assets/intake-form.html) is a working reference implementation; adapt its data and labels, keep its behaviour. It contains no HTML comments (widget tools reject them) and calls `sendPrompt(text)` on submit.
 
 ## Capability check
+
+Decide this before showing the profile card, every time; do not assume text mode from memory.
+
+1. Look for a tool that renders inline HTML widgets in the conversation and lets a widget send a message back. In the Claude desktop app (Chat and Code tabs) and claude.ai this is the visualize widget tool (e.g. `show_widget`, often listed with a setup or "read me" tool). It is frequently **deferred**: if a tool search facility exists, search for "widget" or "visualize" and load it before deciding. Call any required setup tool first, as that tool instructs.
+2. If found, render the form with it, using [`assets/intake-form.html`](../assets/intake-form.html) as the widget body (fill `REV`, `PROFILE`, `SUGGEST`, `KEYWORDS_CONFIRMED` and `CANDIDATES`; keep `sendPrompt` as the submit call). Say in one line above it what the form is for and that its submit button sends the confirmation text.
+3. If no such tool exists (e.g. Codex, Gemini or Antigravity without MCP Apps, command-line hosts), use text cards.
 
 - Use a form only when the host really renders it and returns the submitted text. Never present Markdown boxes or a description of a form as if they were clickable, and never claim a click was received when no submission arrived.
 - A host with only limited choice prompts (e.g. at most a few options per question) may use them for short choices, but candidate selection and free-text profile fields fall back to text.
@@ -44,4 +50,4 @@ When the host can render an interactive form whose submission comes back to the 
 
 ## 中文
 
-宿主能渲染并回传提交内容时，画像卡、候选清单和手动添加客户用表单；否则沿用文字确认。表单只改变输入方式，不改变确认标准。画像表单六项都可自由输入（常用值只作提示），全部必填，单独点“确认画像”，确认后修改须重新确认；候选默认不勾，勾选只计数，须单独点“开始背调”，提交原文即确认依据；手动添加只需公司名、官网、社媒链接、邮箱任一项，支持每行一家批量粘贴并自动识别、查重、续编号，标“手动添加、操作人提供未核实”，社媒链接标平台和类型（主页 / 帖子需追溯发布者 / 短链需展开）。不得把文字方框当成可点击控件。
+宿主能渲染并回传提交内容时（Claude 桌面版和 claude.ai 有内嵌组件工具 `show_widget`，常为延迟加载，须先搜索“widget/visualize”并加载后再判断，每次显示画像卡前都要检查），画像卡、候选清单和手动添加客户用表单；否则沿用文字确认。表单只改变输入方式，不改变确认标准。画像表单六项都可自由输入（常用值只作提示），全部必填，单独点“确认画像”，确认后修改须重新确认；候选默认不勾，勾选只计数，须单独点“开始背调”，提交原文即确认依据；手动添加只需公司名、官网、社媒链接、邮箱任一项，支持每行一家批量粘贴并自动识别、查重、续编号，标“手动添加、操作人提供未核实”，社媒链接标平台和类型（主页 / 帖子需追溯发布者 / 短链需展开）。不得把文字方框当成可点击控件。
